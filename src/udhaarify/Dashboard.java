@@ -274,7 +274,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
        this.dispose(); // TODO add your handling code here:
-       new LoginPage().setVisible(true);
+       new LoginPage(LoginPage.password,LoginPage.hint).setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

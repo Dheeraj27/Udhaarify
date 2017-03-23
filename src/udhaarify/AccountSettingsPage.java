@@ -223,8 +223,8 @@ public class AccountSettingsPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        if(jPasswordField3.getPassword().equals(LoginPage.password)){  
+        String pass_string = new String(jPasswordField3.getPassword());
+        if(pass_string.equals(LoginPage.password)){  
             jPasswordField1.setEnabled(true);
             jPasswordField2.setEnabled(true);
             jTextField4.setEnabled(true);
