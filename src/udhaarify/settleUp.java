@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import static java.sql.JDBCType.NULL;
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -211,7 +212,17 @@ public class settleUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        // flag = 1 => I'm getting paid
+        // flag = 0 => I'm paying   
+        int flag;
+        if(jRadioButton3.isSelected() == true)
+            flag = 0;
+        else
+            flag = 1;
+        
+        int amt = Integer.parseInt(jTextField1.getText());
+        
+        JOptionPane.showMessageDialog(null, "Transaction successfully recorded!");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
