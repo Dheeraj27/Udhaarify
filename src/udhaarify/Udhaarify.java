@@ -9,10 +9,7 @@ package udhaarify;
  *
  * @author ayushmandey
  */
- //FOR MAC LOOK AND FEEL
-            /*System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "WikiTeX");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());*/
+
 public class Udhaarify { //dashboard class
 
     /**
