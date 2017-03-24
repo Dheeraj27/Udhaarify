@@ -60,6 +60,11 @@ public class Dashboard extends javax.swing.JFrame {
         });
 
         jButton2.setText("Settle a bill");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Add a group");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -276,6 +281,11 @@ public class Dashboard extends javax.swing.JFrame {
        this.dispose(); // TODO add your handling code here:
        new LoginPage(LoginPage.password,LoginPage.hint).setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.dispose();
+        new settleUp().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
