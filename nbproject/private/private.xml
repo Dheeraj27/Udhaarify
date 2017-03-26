@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/AddABill.java</file>
-            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/Udhaarify.java</file>
+            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/AddABill.java</file>
+            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/RegisterUser.java</file>
+            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/settleUp.java</file>
+            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/AccountSettingsPage.java</file>
+            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/Dashboard.java</file>
+            <file>file:/Users/ayushmandey/NetBeansProjects/Udhaarify/src/udhaarify/LoginPage.java</file>
         </group>
     </open-files>
 </project-private>
