@@ -12,8 +12,9 @@ public class AddABill extends javax.swing.JFrame {
     
     //int graph[][];
     private String[] peopleInBill;
-    int amount[];
-    
+    float amount[];
+    public static String[] final_string;
+    public static int counter = 0;
     private String[] friend_arr = new String[100];
     private String newFriend;
     
@@ -25,15 +26,15 @@ public class AddABill extends javax.swing.JFrame {
     private String amount_Str;
     private int index=0;
     
-    private int[] amount_arr = new int[20];
+    private float[] amount_arr = new float[100]; //change to avoid exception
     private int size1= 0;
     private int size2= 0;
     private int size5= 0;
     
     private int[] index_paidBy = new int[100];
     private int[] index_splitBy = new int[100];
-    private int[] paidByAmount = new int[100];
-    private int[] splitByAmount = new int[100];
+    private float[] paidByAmount = new float[100];
+    private float[] splitByAmount = new float[100];
     private String amound_paid;
     
     int ctr1=0;
@@ -451,13 +452,13 @@ public class AddABill extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //all elements of the graph are now initialised to zero
-        amount = new int[size];
+        amount = new float[size];
          ListModel model1 = jList2.getModel();
          int paid_size = model1.getSize();
-         int equal_amt = (Integer.parseInt(jTextField3.getText()))/paid_size;
+         float equal_amt = (Float.parseFloat(jTextField3.getText()))/paid_size;
 
             
-            if(jCheckBox2.isSelected()){ //paid by
+        if(jCheckBox2.isSelected()){ //paid by
             //divide by number of people
             
                       
@@ -486,17 +487,21 @@ public class AddABill extends javax.swing.JFrame {
             }
         }
         
-        ListModel model2 = jList3.getModel();
+        ListModel model2 = jList5.getModel();
         int split_size = model2.getSize();
+        float equal_amt2 = (Float.parseFloat(jTextField3.getText()))/split_size;
+
+        
         
         if(jCheckBox1.isSelected()){ //split by
            //divide by number of people
 
             for(int i=0;i<split_size;i++){
                 for(int j=0;j<size;j++){
-                    if(index_splitBy[i] == j)
-                        amount[i]-= equal_amt; //added because incoming money they are creditors
+                    if(index_splitBy[i] == j){
+                        amount[j]-= equal_amt2; //added because incoming money they are creditors
                         break;
+                    }
                 }
                 
             }
@@ -504,9 +509,10 @@ public class AddABill extends javax.swing.JFrame {
         else{
             for(int i=0;i<split_size;i++){
                 for(int j=0;j<size;j++){
-                    if(index_splitBy[i] == j)
-                        amount[i]-= splitByAmount[j];
+                    if(index_splitBy[i] == j){
+                        amount[j]-= splitByAmount[i];
                         break;
+                    }
                 }
                 
             }
@@ -520,17 +526,10 @@ public class AddABill extends javax.swing.JFrame {
         
         minCashflowRec(amount);
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        JOptionPane.showMessageDialog(null, "Bill successfully added");
+        this.dispose();
+        new BillTransactions().setVisible(true);
+   
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -647,7 +646,7 @@ public class AddABill extends javax.swing.JFrame {
                 
                 ListModel model6 = jList2.getModel();
                 int paid_size = model6.getSize();
-                int equal_amt = (Integer.parseInt(jTextField3.getText()))/paid_size;
+                float equal_amt = (Float.parseFloat(jTextField3.getText()))/paid_size;
                 
                 for(int i=0;i<ctr1;i++)
                     list3.addElement(equal_amt);
@@ -660,7 +659,7 @@ public class AddABill extends javax.swing.JFrame {
                 friend_arr[ctr1] = newFriend;
                 amount_Str =(String)jTextField9.getText();
 
-                amount_arr[ctr1]=Integer.parseInt(amount_Str);
+                amount_arr[ctr1]=Float.parseFloat(amount_Str);
                 ctr1++;
                 for(int i=0;i<ctr1;i++)
                 { list2.addElement(friend_arr[i]);
@@ -687,7 +686,7 @@ public class AddABill extends javax.swing.JFrame {
             if(peopleInBill[j]==(String)model2.getElementAt(i)){
             index_paidBy[i] = j;
             
-            paidByAmount[i]= (int)model3.getElementAt(i);
+            paidByAmount[i]= (float)model3.getElementAt(i);
             
             break;
             }
@@ -718,7 +717,7 @@ public class AddABill extends javax.swing.JFrame {
                 
                 ListModel model5 = jList5.getModel();
                 int paid_size = model5.getSize();
-                int equal_amt = (Integer.parseInt(jTextField3.getText()))/paid_size;
+                float equal_amt = (Float.parseFloat(jTextField3.getText()))/paid_size;
                 
                 for(int i=0;i<ctr2;i++)
                     list4.addElement(equal_amt);
@@ -731,7 +730,7 @@ public class AddABill extends javax.swing.JFrame {
                 friend_arr[ctr2] = newFriend;
                 amount_Str =(String)jTextField8.getText();
 
-                amount_arr[ctr2]=Integer.parseInt(amount_Str);
+                amount_arr[ctr2]=Float.parseFloat(amount_Str);
                 ctr2++;
                 for(int i=0;i<ctr2;i++)
                 { list5.addElement(friend_arr[i]);
@@ -762,7 +761,7 @@ public class AddABill extends javax.swing.JFrame {
             if(peopleInBill[j]==(String)model5.getElementAt(i)){
             index_splitBy[i] = j;
             
-            splitByAmount[i]= (int)model4.getElementAt(i);
+            splitByAmount[i]= (float)model4.getElementAt(i);
             break;
             }
             }
@@ -853,7 +852,7 @@ public class AddABill extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 
-     void minCashflowRec(int[] amount) {
+     void minCashflowRec(float[] amount) {
             // Find the indexes of minimum and maximum values in amount[]
             // amount[mxCredit] indicates the maximum amount to be given
             //                  (or credited) to any person .
@@ -861,20 +860,30 @@ public class AddABill extends javax.swing.JFrame {
             //                  (or debited) from any person.
             // So if there is a positive value in amount[], then there must
             // be a negative value
+            
+            //for tracking transactional steps
+            //for(int i=0;i<size;i++)
+            //  System.out.print(amount[i] + " "); //debug
+            //System.out.println();
+            
+            final_string = new String[50];
             int mxCredit = getMax(amount), mxDebit = getMin(amount);
             
 
             // If both amounts are 0, then all amounts are settled
-            if (amount[mxCredit] == 0 && amount[mxDebit] == 0)
+            if ((amount[mxCredit] == 0 && amount[mxDebit] == 0) || amount[mxDebit]>-1 && amount[mxDebit]<0 ){
+                amount[mxDebit] = 0;
                 return;
+            }
 
             // Find the minimum of two amounts
-            int min = minOf2(-amount[mxDebit], amount[mxCredit]);
+            float min = minOf2(-amount[mxDebit], amount[mxCredit]);
             amount[mxCredit] -= min;
             amount[mxDebit] += min;
 
             // If minimum is the maximum amount to be
-            System.out.println("Person " + peopleInBill[mxDebit] + " pays " + min + " to person " + peopleInBill[mxCredit]);
+            System.out.println(peopleInBill[mxDebit] + " pays " + min + " to " + peopleInBill[mxCredit]);
+            final_string[counter++] = peopleInBill[mxDebit]+ " has to pay " + min + " to " + peopleInBill[mxCredit];
 
             // Recur for the amount array.  Note that it is guaranteed that
             // the recursion would terminate as either amount[mxCredit] 
@@ -882,7 +891,7 @@ public class AddABill extends javax.swing.JFrame {
             minCashflowRec(amount);
     }
     // A utility function that returns index of minimum value in arr[]
-        int getMin(int arr[])
+        int getMin(float arr[])
         {
             int minInd = 0;
             for (int i=1; i<size; i++)
@@ -892,17 +901,17 @@ public class AddABill extends javax.swing.JFrame {
         }
 
         // A utility function that returns index of maximum value in arr[]
-        int getMax(int arr[])
+        int getMax(float arr[])
         {
             int maxInd = 0;
             for (int i=1; i<size; i++)
-                if (arr[i] >= arr[maxInd])
+                if (arr[i] >=arr[maxInd])
                     maxInd = i;
             return maxInd;
         }
 
         // A utility function to return minimum of 2 values
-        int minOf2(int x, int y)
+        float minOf2(float x, float y)
         {
             return (x<=y)? x: y;
         }
