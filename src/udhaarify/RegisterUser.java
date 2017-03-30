@@ -4,13 +4,20 @@
  * and open the template in the editor.
  */
 package udhaarify;
-
+import java.sql.*;
+import javax.swing.JOptionPane;
 /**
  *
  * @author ayushmandey
  */
 public class RegisterUser extends javax.swing.JFrame {
-
+    
+    public String name;
+    public String username;
+    public String email;
+    public long phone;
+    //public String password;
+    public String pass_hint;    
     /**
      * Creates new form RegisterUser
      */
@@ -51,11 +58,29 @@ public class RegisterUser extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel1.setText("Enter name");
 
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel3.setText("Enter username");
 
         jLabel4.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel4.setText("Enter email");
+
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Al Bayan", 1, 24)); // NOI18N
         jLabel5.setText("Make your Udhaarify account");
@@ -71,6 +96,12 @@ public class RegisterUser extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel9.setText("Enter  phone number");
+
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(51, 153, 255));
         jButton2.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
@@ -118,10 +149,11 @@ public class RegisterUser extends javax.swing.JFrame {
                                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGap(85, 85, 85)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(41, 41, 41))
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,12 +211,50 @@ public class RegisterUser extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.dispose();
-        new LoginPage(LoginPage.password,LoginPage.hint).setVisible(true);        // TODO add your handling code here:
+        new LoginPage().setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        username = jTextField2.getText();
+        name = jTextField1.getText();
+        phone = Long.parseLong(jTextField5.getText()); 
+        email = jTextField3.getText();
+        String password = new String(jPasswordField1.getPassword());
+        pass_hint = jTextField4.getText();
+        
+        try{
+            Statement st1 = MySQLConnection.getConnection().createStatement();
+            st1.executeUpdate("insert into user values('"+username+"','"+name+"',"+phone+",'"+email+"','"+password+"','"+pass_hint+"')");
+            JOptionPane.showMessageDialog(null, "Registration Successful");
+// MAKE A SUCCESSFULL BOX HERE
+                }
+        catch (SQLIntegrityConstraintViolationException e){
+            System.out.println("Duplicate entry");
+        
+        }
+        catch(Exception e1){
+            System.out.println("Unsuccessful");
+            JOptionPane.showMessageDialog(null, "User already exists");
+            //System.out.println("insert into user values('"+username+"','"+name+"',"+phone+",'"+email+"','"+password+"','"+pass_hint+"')");
+            e1.printStackTrace();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,7 +282,7 @@ public class RegisterUser extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(RegisterUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

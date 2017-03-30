@@ -1,22 +1,22 @@
 package udhaarify;
-
+import java.sql.*;
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 public class LoginPage extends javax.swing.JFrame {
-
     public static String password;
     public static String hint;
+    public static String username;
     
     public LoginPage(String password, String hint){
         initComponents();
-        this.password = password;
+        //this.password = password;
         this.hint = hint;
     }
     
     public LoginPage(){
         initComponents();
-        password = "admin";
-        hint = "administrator";
     }
     
     /**
@@ -54,6 +54,12 @@ public class LoginPage extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("PASSWORD");
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Palatino Linotype", 0, 18)); // NOI18N
         jButton1.setText("LOG IN");
@@ -167,13 +173,35 @@ public class LoginPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String pass = new String(jPasswordField1.getPassword());
-        if(jTextField1.getText().equals("admin") && pass.equals(password)){
-            this.dispose();
-            new Dashboard().setVisible(true);
+        try {
+            System.out.println("Here!");
+            username = jTextField1.getText();
+            String pass = new String(jPasswordField1.getPassword());
+            System.out.println(username+" "+pass);
+            int flag = 0;
+            String query = "select * from user where username = ? and password = ?";
+            PreparedStatement stmt = MySQLConnection.getConnection().prepareStatement(query);
+            stmt.setString(1, username);
+            stmt.setString(2, pass);
+            ResultSet rs = stmt.executeQuery();
+            System.out.println("Here too");
+            if (rs.next()){
+                flag=1;
+                System.out.println("Login Success!");
+                password = pass;
+                
+            }
+            if(flag==1){
+                JOptionPane.showMessageDialog(null,"Login Successful");
+                this.dispose();
+                new Dashboard().setVisible(true);
+            }
+            else
+                JOptionPane.showMessageDialog(null,"Username/password entered is wrong, retry!");
+        } catch (SQLException ex) {
+            System.out.println("Exception found");
+            ex.printStackTrace();
         }
-        else
-            JOptionPane.showMessageDialog(null,"Username/password entered is wrong, retry!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -181,7 +209,19 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        JOptionPane.showMessageDialog(null, "HINT: " + hint);        // TODO add your handling code here:
+        try {
+            username = jTextField1.getText();
+            String query = "select pass_hint from user where username = ?";
+            PreparedStatement p_hint = MySQLConnection.getConnection().prepareStatement(query);
+            p_hint.setString(1, username);
+            ResultSet rs = p_hint.executeQuery();
+            rs.next();
+            hint = rs.getString(1);
+            JOptionPane.showMessageDialog(null, "HINT: " + hint);        // TODO add your handling code here:
+        } catch (SQLException ex) {
+            System.out.println("Exception found");
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
@@ -192,6 +232,10 @@ public class LoginPage extends javax.swing.JFrame {
         this.dispose();
         new RegisterUser().setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
