@@ -11,12 +11,12 @@ public class AddABill extends javax.swing.JFrame {
      */
     
     //int graph[][];
-    private String[] peopleInBill;
+    String[] peopleInBill;
     float amount[];
-    public static String[] final_string;
-    public static int counter = 0;
-    private String[] friend_arr = new String[100];
-    private String newFriend;
+    static String[] final_string;
+    static int counter = 0;
+    String[] friend_arr = new String[100];
+    String newFriend;
     
     int ctr = 0;
     int size;
@@ -53,7 +53,7 @@ public class AddABill extends javax.swing.JFrame {
         jButton2.setEnabled(false);
         jButton5.setEnabled(false);
         
-      
+        
 
         
     }
@@ -523,7 +523,7 @@ public class AddABill extends javax.swing.JFrame {
         // amount[p] indicates the net amount to be credited/debited to/from person 'p'
         // If amount[p] is positive, then i'th person will get amount[i]
         // If amount[p] is negative, then i'th person will give  -amount[i]
-        
+
         minCashflowRec(amount);
         
         JOptionPane.showMessageDialog(null, "Bill successfully added");
@@ -630,11 +630,11 @@ public class AddABill extends javax.swing.JFrame {
         DefaultListModel list2 = new DefaultListModel();
         DefaultListModel list3 = new DefaultListModel();
         
+        jCheckBox2.setEnabled(false);
+
+        
          if(jCheckBox2.isSelected()){
-                 
-                 
-                
-                
+           
                 
                 newFriend = (String)jComboBox3.getSelectedItem();
                 friend_arr[ctr1++] = newFriend;
@@ -654,52 +654,71 @@ public class AddABill extends javax.swing.JFrame {
                 
          }
          else{
-        
-                newFriend = (String)jComboBox3.getSelectedItem();
-                friend_arr[ctr1] = newFriend;
-                amount_Str =(String)jTextField9.getText();
+                if(jTextField9.getText().equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter amount!");
+                }
+                else{
+                    newFriend = (String)jComboBox3.getSelectedItem();
+                    friend_arr[ctr1] = newFriend;
+                    amount_Str =(String)jTextField9.getText();
 
-                amount_arr[ctr1]=Float.parseFloat(amount_Str);
-                ctr1++;
-                for(int i=0;i<ctr1;i++)
-                { list2.addElement(friend_arr[i]);
+                    amount_arr[ctr1]=Float.parseFloat(amount_Str);
+                    ctr1++;
+                    for(int i=0;i<ctr1;i++)
+                    { list2.addElement(friend_arr[i]);
 
+
+                    }
+                    jList2.setModel(list2);
+                    for(int i=0;i<ctr1;i++)
+                        list3.addElement(amount_arr[i]);
+                    jList3.setModel(list3);        // TODO add your handling code here:
 
                 }
-                jList2.setModel(list2);
-                for(int i=0;i<ctr1;i++)
-                    list3.addElement(amount_arr[i]);
-                jList3.setModel(list3);        // TODO add your handling code here:
-
          }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        jList2.setEnabled(false);
-        jList3.setEnabled(false);
-        ListModel model2 = jList2.getModel();
-        size1 = model2.getSize();
         ListModel model3 = jList3.getModel();
         size2= model3.getSize();
-        for(int i=0; i < size1; i++){
-            for(int j=0;j<size;j++){
-            if(peopleInBill[j]==(String)model2.getElementAt(i)){
-            index_paidBy[i] = j;
+        ListModel model2 = jList2.getModel();
+        size1 = model2.getSize();
+        int sum = 0;
+        for(int i=0;i<size2;i++){
+            sum += (float)model3.getElementAt(i);
+        }
+        if(sum!=Integer.parseInt(jTextField3.getText().toString())){
+            JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
+            jList2.removeAll();  // ***** NOT WORKING *****
+            jList3.removeAll();  // ***** NOT WORKING *****
+        }
+        else{
+        
+        
+            jList2.setEnabled(false);
+            jList3.setEnabled(false);
             
-            paidByAmount[i]= (float)model3.getElementAt(i);
-            
-            break;
-            }
-            }
-        } 
+
+            for(int i=0; i < size1; i++){
+                for(int j=0;j<size;j++){
+                    if(peopleInBill[j]==(String)model2.getElementAt(i)){
+                        index_paidBy[i] = j;
+                        paidByAmount[i]= (float)model3.getElementAt(i);
+                        break;
+                    }
+                }
+            } 
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-
+        
 
         DefaultListModel list5 = new DefaultListModel();
         DefaultListModel list4 = new DefaultListModel();
+        jCheckBox1.setEnabled(false);
         
         if(jCheckBox1.isSelected()){
                  
@@ -725,22 +744,27 @@ public class AddABill extends javax.swing.JFrame {
                 
          }
          else{
-        
-                newFriend = (String)jComboBox4.getSelectedItem();
-                friend_arr[ctr2] = newFriend;
-                amount_Str =(String)jTextField8.getText();
-
-                amount_arr[ctr2]=Float.parseFloat(amount_Str);
-                ctr2++;
-                for(int i=0;i<ctr2;i++)
-                { list5.addElement(friend_arr[i]);
-
-
+                if(jTextField8.getText().equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter amount");
                 }
-                jList5.setModel(list5);
-                for(int i=0;i<ctr2;i++)
-                    list4.addElement(amount_arr[i]);
-                jList4.setModel(list4);        // TODO add your handling code here:
+                else{
+        
+                    newFriend = (String)jComboBox4.getSelectedItem();
+                    friend_arr[ctr2] = newFriend;
+                    amount_Str =(String)jTextField8.getText();
+
+                    amount_arr[ctr2]=Float.parseFloat(amount_Str);
+                    ctr2++;
+                    for(int i=0;i<ctr2;i++)
+                    { list5.addElement(friend_arr[i]);
+
+
+                    }
+                    jList5.setModel(list5);
+                    for(int i=0;i<ctr2;i++)
+                        list4.addElement(amount_arr[i]);
+                    jList4.setModel(list4);        // TODO add your handling code here:
+                }
 
          }
         
@@ -860,21 +884,20 @@ public class AddABill extends javax.swing.JFrame {
             //                  (or debited) from any person.
             // So if there is a positive value in amount[], then there must
             // be a negative value
-            
+            final_string = new String[100];
             //for tracking transactional steps
-            //for(int i=0;i<size;i++)
-            //  System.out.print(amount[i] + " "); //debug
-            //System.out.println();
+            /*for(int i=0;i<size;i++)
+             System.out.print(amount[i] + " "); //debug
+             System.out.println();*/
             
-            final_string = new String[50];
             int mxCredit = getMax(amount), mxDebit = getMin(amount);
             
 
             // If both amounts are 0, then all amounts are settled
-            if ((amount[mxCredit] == 0 && amount[mxDebit] == 0) || amount[mxDebit]>-1 && amount[mxDebit]<0 ){
-                amount[mxDebit] = 0;
+            if ((amount[mxCredit] == 0 && amount[mxDebit] == 0) || (amount[mxDebit]>-1 && amount[mxDebit]<0) 
+                    || (amount[mxCredit]>0 && amount[mxCredit]<1))
                 return;
-            }
+            
 
             // Find the minimum of two amounts
             float min = minOf2(-amount[mxDebit], amount[mxCredit]);
@@ -882,9 +905,8 @@ public class AddABill extends javax.swing.JFrame {
             amount[mxDebit] += min;
 
             // If minimum is the maximum amount to be
-            System.out.println(peopleInBill[mxDebit] + " pays " + min + " to " + peopleInBill[mxCredit]);
-            final_string[counter++] = peopleInBill[mxDebit]+ " has to pay " + min + " to " + peopleInBill[mxCredit];
-
+            final_string[counter++] = peopleInBill[mxDebit]+ " has to pay " + (int)min + " to " + peopleInBill[mxCredit];
+            System.out.println(final_string[counter-1]);
             // Recur for the amount array.  Note that it is guaranteed that
             // the recursion would terminate as either amount[mxCredit] 
             // or  amount[mxDebit] becomes 0
