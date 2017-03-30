@@ -1,9 +1,15 @@
 package udhaarify;
-
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 public class AccountSettingsPage extends javax.swing.JFrame {
-
+    
+    public String name;
+    public String email;
+    public String phone;
+    
     /**
      * Creates new form AccountSettingsPage
      */
@@ -15,10 +21,7 @@ public class AccountSettingsPage extends javax.swing.JFrame {
         jPasswordField3.setEnabled(false);
         jButton2.setEnabled(false);
         jButton1.setEnabled(false);
-        jLabel10.setText("Ayushman");
-        jLabel14.setText("ayushman_dey");
-        jLabel15.setText("ayushman,dey97@gmail.com");
-        jLabel13.setText("9871418609");
+        getMySQLData();
     }
 
     @SuppressWarnings("unchecked")
@@ -246,14 +249,24 @@ public class AccountSettingsPage extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String pass1 = new String(jPasswordField1.getPassword());
         String pass2 = new String(jPasswordField2.getPassword());
+        String new_hint = jTextField4.getText();
         if(pass1.equals(pass2)){
-            LoginPage.password = new String(jPasswordField1.getPassword());
-            LoginPage.hint = jTextField4.getText();
-            JOptionPane.showMessageDialog(null,"Changes saved, login again!");
-            this.dispose();
-            new LoginPage(LoginPage.password,LoginPage.hint).setVisible(true);
+            try {
+                String update_pass = "update user set password = ? , pass_hint = ? where username = ?";
+                PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(update_pass);
+                st3.setString(1, pass1);
+                st3.setString(2, new_hint);
+                st3.setString(3, LoginPage.username);
+                st3.executeUpdate();
+                JOptionPane.showMessageDialog(null,"Changes saved, login again!");
+                this.dispose();
+                new LoginPage().setVisible(true);
+            } 
+            catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Database error");
+            }
             
-        }        // TODO add your handling code here:
+        }
         else{
             JOptionPane.showMessageDialog(null,"Mismatching passwords, retry!");
         }
@@ -265,14 +278,45 @@ public class AccountSettingsPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        String new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
-        while(new_phone.length()!=10){
-            JOptionPane.showMessageDialog(null,"Invalid phone number, enter again!");
-            new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
-        }
+        try {
+            String new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
+            while(new_phone.length()!=10){
+                JOptionPane.showMessageDialog(null,"Invalid phone number, enter again!");
+                new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
+            }
+            String update_phone = "update user set phone = ? where username = ?";
+            PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(update_phone);
+            st2.setString(1, new_phone);
+            st2.setString(2, LoginPage.username);
+            st2.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Phone number updated!");
             jLabel13.setText(new_phone);        
+        } catch (SQLException ex) {
+                System.out.println("Database error");
+                JOptionPane.showMessageDialog(null, "Database error");
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    public void getMySQLData(){
+        try {
+            jLabel14.setText(LoginPage.username);
+            String query1 = "select name,email,phone from user where username = ?";
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(query1);
+            st1.setString(1, LoginPage.username);
+            ResultSet rs = st1.executeQuery();
+            rs.next();
+            name = rs.getString(1);
+            email = rs.getString(2);
+            phone = rs.getString(3);
+            jLabel10.setText(name);
+            jLabel13.setText(phone);
+            jLabel15.setText(email);
+        } catch (SQLException ex) {
+            System.out.println("SQL Error");
+            JOptionPane.showMessageDialog(null, "Database error");
+        }
+         
+    }
     /**
      * @param args the command line arguments
      */
