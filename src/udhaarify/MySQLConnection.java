@@ -19,7 +19,7 @@ public class MySQLConnection {
         if (con != null) 
         return con;
         // get database, username, password from settings file
-        return getConnection("udhaarify", "root", "Dheeraj1234!");
+        return getConnection("udhaarify", "root", "ayushman.dey97");
     }
 
     private static Connection getConnection(String db_name,String user_name,String password)
@@ -27,7 +27,7 @@ public class MySQLConnection {
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost/"+db_name+"?user="+user_name+"&password="+password);
+            con=DriverManager.getConnection("jdbc:mysql://localhost/" + db_name + "?user=" + user_name + "&password=" +password);
         }
         catch(Exception e)
         {

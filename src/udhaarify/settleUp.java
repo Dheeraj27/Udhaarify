@@ -63,7 +63,7 @@ public class settleUp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton2.setFont(new java.awt.Font("American Typewriter", 1, 18)); // NOI18N
+        jButton2.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jButton2.setText("Record Cash Transaction");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,7 +71,7 @@ public class settleUp extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("American Typewriter", 1, 18)); // NOI18N
+        jButton3.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jButton3.setText("Pay by Paytm");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
