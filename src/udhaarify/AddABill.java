@@ -613,10 +613,8 @@ public class AddABill extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        //   for customize bill page
-        //   AMOUNT = Float.parseFloat(jTextField3.getText());
-        //   this.dispose();
-        //   new CustomizeBill().setVisible(true);
+        ListModel model = jList1.getModel();
+        if(model.getSize()!=0){
         
             jButton10.setEnabled(false);
             jButton6.setEnabled(false);
@@ -633,7 +631,7 @@ public class AddABill extends javax.swing.JFrame {
 
              //extracting people from the list
             peopleInBill = new String[100];
-            ListModel model = jList1.getModel();
+            
             size = model.getSize();
             for(int i=0; i < size; i++)
                 peopleInBill[i] =  (String)(model.getElementAt(i));
@@ -644,7 +642,9 @@ public class AddABill extends javax.swing.JFrame {
             index++;
         
         }
-        
+        }
+        else
+            JOptionPane.showMessageDialog(null, "No friends added yet!");
         
        
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -779,11 +779,11 @@ public class AddABill extends javax.swing.JFrame {
         size2= model3.getSize();
         DefaultListModel model2 = (DefaultListModel)jList2.getModel();
         size1 = model2.getSize();
-        int sum = 0;
+        float sum = 0;
         for(int i=0;i<size2;i++){
             sum += (float)model3.getElementAt(i);
         }
-        if(sum!=Integer.parseInt(jTextField3.getText().toString())){
+        if(Math.floor(sum)!=Integer.parseInt(jTextField3.getText().toString())){
             JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
                model2.removeAllElements();
                model3.removeAllElements(); 
@@ -885,11 +885,11 @@ public class AddABill extends javax.swing.JFrame {
         size2= model15.getSize();
         DefaultListModel model14 = (DefaultListModel)jList4.getModel();
         size1 = model14.getSize();
-        int sum = 0;
+        float sum = 0;
         for(int i=0;i<size2;i++){
             sum += (float)model14.getElementAt(i);
         }
-        if(sum!=Integer.parseInt(jTextField3.getText().toString())){
+        if(Math.floor(sum)!=Integer.parseInt(jTextField3.getText().toString())){
             JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
                model14.removeAllElements();
                model15.removeAllElements();
