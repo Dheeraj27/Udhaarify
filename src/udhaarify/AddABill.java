@@ -30,12 +30,10 @@ public class AddABill extends javax.swing.JFrame {
     private int[] index_splitBy = new int[100];
     private float[] paidByAmount = new float[100];
     private float[] splitByAmount = new float[100];
-    private String amound_paid;
     
     int ctr1=0;
     int ctr2=0;
 
-    static float AMOUNT;
     public AddABill() {
         initComponents();
         jComboBox3.setEnabled(false);
@@ -667,14 +665,32 @@ public class AddABill extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         DefaultListModel list = new DefaultListModel();
-     
+        ListModel duplicates = jList1.getModel();
+       
         newFriend = (String)jComboBox1.getSelectedItem();
-        friend_arr[ctr] = newFriend;
-        ctr++;
-        for(int i=0;i<ctr;i++)
-            list.addElement(friend_arr[i]);
-        
-        jList1.setModel(list);        // TODO add your handling code here:
+        int flag = 1;
+        if(duplicates.getSize()!=0){
+            for(int j=0;j<duplicates.getSize();j++){
+                if(newFriend.equals((String)duplicates.getElementAt(j))){
+                    flag = 0;
+                    JOptionPane.showMessageDialog(null, "Friend already added!");
+                    break;
+                }
+            }
+            if(flag == 1){
+                friend_arr[ctr] = newFriend;
+                ctr++;
+            }
+        }
+        else{
+            friend_arr[ctr] = newFriend;
+            ctr++;
+        }
+           for(int i=0;i<ctr;i++)
+               list.addElement(friend_arr[i]);
+
+           jList1.setModel(list);   
+           // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -688,60 +704,80 @@ public class AddABill extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         DefaultListModel list2 = new DefaultListModel();
         DefaultListModel list3 = new DefaultListModel();
-        
+   
         jCheckBox2.setEnabled(false);
 
+       
         
-         if(jCheckBox2.isSelected()){
-           
-                
-                newFriend = (String)jComboBox3.getSelectedItem();
-                friend_arr[ctr1++] = newFriend;
-
-                for(int i=0;i<ctr1;i++)
-                     list2.addElement(friend_arr[i]);
-                
-                jList2.setModel(list2);
-                
-                ListModel model6 = jList2.getModel();
-                int paid_size = model6.getSize();
-                float equal_amt = (Float.parseFloat(jTextField3.getText()))/paid_size;
-                
-                for(int i=0;i<ctr1;i++)
-                    list3.addElement(equal_amt);
-                jList3.setModel(list3);
-                
-         }
-         else{
-                if(jTextField1.getText().equals("")){
-                    JOptionPane.showMessageDialog(null, "Please enter amount!");
+        ListModel duplicates1 = jList2.getModel();
+        
+        newFriend = jComboBox3.getSelectedItem().toString();
+        
+        int flag = 1;
+        if(duplicates1.getSize()!=0){
+            for(int j=0;j<duplicates1.getSize();j++){
+                if(newFriend.equals(duplicates1.getElementAt(j).toString())){
+                    flag = 0;
+                    JOptionPane.showMessageDialog(null, "Friend already added!");
+                    return;
                 }
-                else{
-                    newFriend = (String)jComboBox3.getSelectedItem();
-                    friend_arr[ctr1] = newFriend;
-                    amount_Str =(String)jTextField1.getText();
+            }
+            if(flag == 1)
+                friend_arr[ctr1++] = newFriend;            
+        }
+        else{
+            friend_arr[ctr1++] = newFriend;
+        }
+            
+                if(jCheckBox2.isSelected()){
 
-                    amount_arr[ctr1]=Float.parseFloat(amount_Str);
-                    ctr1++;
+
+                
+
                     for(int i=0;i<ctr1;i++)
-                    { list2.addElement(friend_arr[i]);
+                         list2.addElement(friend_arr[i]);
 
-
-                    }
                     jList2.setModel(list2);
-                    for(int i=0;i<ctr1;i++)
-                        list3.addElement(amount_arr[i]);
-                    jList3.setModel(list3);        // TODO add your handling code here:
 
-                }
-         }
+                    ListModel model6 = jList2.getModel();
+                    int paid_size = model6.getSize();
+                    float equal_amt = (Float.parseFloat(jTextField3.getText()))/paid_size;
+
+                    for(int i=0;i<ctr1;i++)
+                        list3.addElement(equal_amt);
+                    jList3.setModel(list3);
+
+             }
+            else{
+                   if(jTextField1.getText().equals("")){
+                       JOptionPane.showMessageDialog(null, "Please enter amount!");
+                   }
+                   else{
+                     
+                       amount_Str =jTextField1.getText().toString();
+
+                       amount_arr[ctr1-1]=Float.parseFloat(amount_Str);
+                      
+                       for(int i=0;i<ctr1;i++)
+                       { list2.addElement(friend_arr[i]);
+
+
+                       }
+                       jList2.setModel(list2);
+                       for(int i=0;i<ctr1;i++)
+                           list3.addElement(amount_arr[i]);
+                       jList3.setModel(list3);        // TODO add your handling code here:
+
+                   }
+            }
+        
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        ListModel model3 = jList3.getModel();
+        DefaultListModel model3 = (DefaultListModel)jList3.getModel();
         size2= model3.getSize();
-        ListModel model2 = jList2.getModel();
+        DefaultListModel model2 = (DefaultListModel)jList2.getModel();
         size1 = model2.getSize();
         int sum = 0;
         for(int i=0;i<size2;i++){
@@ -749,8 +785,11 @@ public class AddABill extends javax.swing.JFrame {
         }
         if(sum!=Integer.parseInt(jTextField3.getText().toString())){
             JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
-            jList2.removeAll();  // ***** NOT WORKING *****
-            jList3.removeAll();  // ***** NOT WORKING *****
+               model2.removeAllElements();
+               model3.removeAllElements(); 
+               
+               friend_arr = new String[100];
+               ctr1 = 0;
         }
         else{
         
@@ -778,15 +817,27 @@ public class AddABill extends javax.swing.JFrame {
         DefaultListModel list5 = new DefaultListModel();
         DefaultListModel list4 = new DefaultListModel();
         jCheckBox1.setEnabled(false);
+        ListModel duplicates2 = jList5.getModel();
         
+        newFriend = jComboBox4.getSelectedItem().toString();
+        
+        int flag = 1;
+        if(duplicates2.getSize()!=0){
+            for(int j=0;j<duplicates2.getSize();j++){
+                if(newFriend.equals(duplicates2.getElementAt(j).toString())){
+                    flag = 0;
+                    JOptionPane.showMessageDialog(null, "Friend already added!");
+                    return;
+                }
+            }
+            if(flag == 1)
+                friend_arr[ctr2++] = newFriend;            
+        }
+        else{
+            friend_arr[ctr2++] = newFriend;
+        }
         if(jCheckBox1.isSelected()){
-                 
-                 
-                
-                
-                
-                newFriend = (String)jComboBox4.getSelectedItem();
-                friend_arr[ctr2++] = newFriend;
+        
 
                 for(int i=0;i<ctr2;i++)
                      list5.addElement(friend_arr[i]);
@@ -807,13 +858,11 @@ public class AddABill extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Please enter amount");
                 }
                 else{
-        
-                    newFriend = (String)jComboBox4.getSelectedItem();
-                    friend_arr[ctr2] = newFriend;
+  
                     amount_Str =(String)jTextField8.getText();
 
-                    amount_arr[ctr2]=Float.parseFloat(amount_Str);
-                    ctr2++;
+                    amount_arr[ctr2-1]=Float.parseFloat(amount_Str);
+
                     for(int i=0;i<ctr2;i++)
                     { list5.addElement(friend_arr[i]);
 
@@ -832,23 +881,39 @@ public class AddABill extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        jList4.setEnabled(false);
-        jList5.setEnabled(false);
+        DefaultListModel model15 = (DefaultListModel)jList5.getModel();
+        size2= model15.getSize();
+        DefaultListModel model14 = (DefaultListModel)jList4.getModel();
+        size1 = model14.getSize();
+        int sum = 0;
+        for(int i=0;i<size2;i++){
+            sum += (float)model14.getElementAt(i);
+        }
+        if(sum!=Integer.parseInt(jTextField3.getText().toString())){
+            JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
+               model14.removeAllElements();
+               model15.removeAllElements();
+               friend_arr = new String[100];
+               ctr2 = 0;
+        }
+        else{
+            jList4.setEnabled(false);
+            jList5.setEnabled(false);
 
-        ListModel model5 = jList5.getModel();
-        size5 = model5.getSize();
-        ListModel model4 = jList4.getModel();
-        size2 = model4.getSize();
-        for(int i=0; i < size5; i++){
-            for(int j=0;j<size;j++){
-            if(peopleInBill[j]==(String)model5.getElementAt(i)){
-            index_splitBy[i] = j;
-            
-            splitByAmount[i]= (float)model4.getElementAt(i);
-            break;
-            }
-            }
-        }         // TODO add your handling code here:
+            ListModel model5 = jList5.getModel();
+            size5 = model5.getSize();
+            ListModel model4 = jList4.getModel();
+            size2 = model4.getSize();
+            for(int i=0; i < size5; i++){
+                for(int j=0;j<size;j++){
+                    if(peopleInBill[j]==(String)model5.getElementAt(i)){
+                        index_splitBy[i] = j;
+                        splitByAmount[i]= (float)model4.getElementAt(i);
+                        break;
+                    }
+                }
+            }       
+        }// TODO add your handling code here:
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -939,11 +1004,12 @@ if(jTextField2.getText().equals(""))
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         DefaultListModel l = (DefaultListModel)jList1.getModel();
         int selectedIndex = jList1.getSelectedIndex();
+        String friend = l.getElementAt(selectedIndex).toString();
         if(selectedIndex!=-1){
             l.remove(selectedIndex);// TODO add your handling code here:
             // TODO add your handling code here:
             for(int i=0;i<friend_arr.length;i++){
-                if(friend_arr[selectedIndex].equals(friend_arr[i])){
+                if(friend.equals(friend_arr[i])){
                     for(int j=i;j<friend_arr.length-1;j++)
                         friend_arr[j]=friend_arr[j+1];
                     ctr--;
