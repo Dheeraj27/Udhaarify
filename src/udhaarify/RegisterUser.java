@@ -23,6 +23,19 @@ public class RegisterUser extends javax.swing.JFrame {
      */
     public RegisterUser() {
         initComponents();
+        jTextField1.setDocument
+        (new JTextFieldLimit(20));
+        jTextField2.setDocument
+        (new JTextFieldLimit(20));
+        jTextField5.setDocument
+        (new JTextFieldLimit(10));
+        jTextField4.setDocument(new JTextFieldLimit(20));
+        
+   
+   
+       
+     
+        
     }
 
     /**
@@ -58,17 +71,19 @@ public class RegisterUser extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel1.setText("Enter name");
 
+        jTextField1.setToolTipText("Enter Valid Name (Limit: 20 Characters)\nNo Special Characters or Numbers!");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
             }
         });
-
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
             }
         });
+
+        jTextField2.setToolTipText("Maximum 20 Characters");
 
         jLabel3.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel3.setText("Enter username");
@@ -76,6 +91,12 @@ public class RegisterUser extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel4.setText("Enter email");
 
+        jTextField3.setToolTipText("Enter valid Email address");
+        jTextField3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField3FocusLost(evt);
+            }
+        });
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -84,6 +105,17 @@ public class RegisterUser extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Al Bayan", 1, 24)); // NOI18N
         jLabel5.setText("Make your Udhaarify account");
+
+        jPasswordField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jPasswordField1FocusLost(evt);
+            }
+        });
+        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField1ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel6.setText("Enter password");
@@ -94,12 +126,31 @@ public class RegisterUser extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel8.setText("Enter password hint");
 
+        jTextField4.setToolTipText("Maximum 20 Characters");
+
         jLabel9.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jLabel9.setText("Enter  phone number");
 
+        jTextField5.setToolTipText("Enter a valid mobile number");
+        jTextField5.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField5FocusLost(evt);
+            }
+        });
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField5ActionPerformed(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField5KeyTyped(evt);
+            }
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField5KeyReleased(evt);
             }
         });
 
@@ -215,6 +266,31 @@ public class RegisterUser extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         EmailValidator emailValidator = new EmailValidator();
+         String number = (String)jTextField5.getText();
+         String password1 = new String(jPasswordField1.getPassword());
+         String password2 = new String(jPasswordField2.getPassword());
+
+
+        if(jTextField2.getText().isEmpty() || jTextField1.getText().isEmpty()|| jTextField3.getText().isEmpty()||jTextField5.getText().isEmpty()||jTextField4.getText().isEmpty()||jPasswordField1.getText().isEmpty()||jPasswordField2.getText().isEmpty()){
+           JOptionPane.showMessageDialog(null,"No Field can be Empty!");
+       }
+        
+        else if(!emailValidator.validate(jTextField3.getText().trim())){
+        
+        JOptionPane.showMessageDialog(null,"Invalid Email ID");
+         jTextField3.setText("");
+         }
+        else if(number.length()<10){
+            JOptionPane.showMessageDialog(null,"Invalid phone number, enter again!"); 
+        }
+        else if(!password1.equals(password2)){
+            JOptionPane.showMessageDialog(null,"Password and Confirm Password DO NOT MATCH!");
+            
+        }
+   
+    
+        else{
         username = jTextField2.getText();
         name = jTextField1.getText();
         phone = Long.parseLong(jTextField5.getText()); 
@@ -222,6 +298,11 @@ public class RegisterUser extends javax.swing.JFrame {
         String password = new String(jPasswordField1.getPassword());
         pass_hint = jTextField4.getText();
         
+       if(jTextField2.getText().isEmpty() || jTextField1.getText().isEmpty()|| jTextField3.getText().isEmpty()||jTextField5.getText().isEmpty()||jTextField4.getText().isEmpty()||jPasswordField1.getText().isEmpty()||jPasswordField2.getText().isEmpty()){
+           JOptionPane.showMessageDialog(null,"No Field can be Empty!");
+       }
+   
+       
         try{
             Statement st1 = MySQLConnection.getConnection().createStatement();
             st1.executeUpdate("insert into user values('"+username+"','"+name+"',"+phone+",'"+email+"','"+password+"','"+pass_hint+"')");
@@ -238,6 +319,7 @@ public class RegisterUser extends javax.swing.JFrame {
             //System.out.println("insert into user values('"+username+"','"+name+"',"+phone+",'"+email+"','"+password+"','"+pass_hint+"')");
             e1.printStackTrace();
         }
+       }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -255,6 +337,61 @@ public class RegisterUser extends javax.swing.JFrame {
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField3FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField3FocusLost
+   
+   // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3FocusLost
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+      // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5KeyPressed
+
+    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+         // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5KeyTyped
+
+    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
+ Long x;
+        try {
+        x = Long.parseLong(jTextField5.getText());
+    } catch (NumberFormatException nfe) {
+        jTextField5.setText("");
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5KeyReleased
+
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void jPasswordField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusLost
+      // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField1FocusLost
+
+    private void jTextField5FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField5FocusLost
+
+             // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5FocusLost
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+   String naming = new String(jTextField1.getText());
+   char[] nameArr=new char[10];
+   nameArr= naming.toCharArray();
+    for(int i=0;i<nameArr.length;i++){
+        if(((nameArr[i]>=65 && nameArr[i]<=90) || (nameArr[i]>=97 && nameArr[i]<=122))|| (nameArr[i]==32)){
+            
+           }
+        else{
+            jTextField1.setText("");
+            }
+    }
+//String x=new String();
+  //      try {
+    //    x = (jTextField5.getText());
+    //} catch (NumberFormatException nfe) {
+     //   jTextField5.setText(""); 
+    //}// TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     /**
      * @param args the command line arguments

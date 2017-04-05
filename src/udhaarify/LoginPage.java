@@ -13,10 +13,15 @@ public class LoginPage extends javax.swing.JFrame {
         initComponents();
         //this.password = password;
         this.hint = hint;
+       
     }
     
     public LoginPage(){
         initComponents();
+         jTextField1.setDocument
+        (new JTextFieldLimit(20));
+        jPasswordField1.setDocument
+        (new JTextFieldLimit(20));
     }
     
     /**
@@ -36,6 +41,7 @@ public class LoginPage extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
@@ -69,6 +75,13 @@ public class LoginPage extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("EXIT");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -200,6 +213,10 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       String password1 = new String(jPasswordField1.getPassword());
+     if(jTextField1.getText().isEmpty() || password1.equals("")){
+         JOptionPane.showMessageDialog(null,"Username Or Password field EMPTY!");
+     }
         try {
             username = jTextField1.getText();
             String pass = new String(jPasswordField1.getPassword());
