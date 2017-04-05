@@ -201,22 +201,17 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            System.out.println("Here!");
             username = jTextField1.getText();
             String pass = new String(jPasswordField1.getPassword());
-            System.out.println(username+" "+pass);
             int flag = 0;
             String query = "select * from user where username = ? and password = ?";
             PreparedStatement stmt = MySQLConnection.getConnection().prepareStatement(query);
             stmt.setString(1, username);
             stmt.setString(2, pass);
             ResultSet rs = stmt.executeQuery();
-            System.out.println("Here too");
             if (rs.next()){
                 flag=1;
-                System.out.println("Login Success!");
                 password = pass;
-
             }
             if(flag==1){
                 JOptionPane.showMessageDialog(null,"Login Successful");
