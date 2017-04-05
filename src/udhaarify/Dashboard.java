@@ -4,16 +4,24 @@
  * and open the template in the editor.
  */
 package udhaarify;
-
+import java.awt.Dimension;
+import java.sql.*;
 import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 public class Dashboard extends javax.swing.JFrame {
 
+    //dheeraj DB variables
+    public static String[] friends = new String[20];
+    String check;
     /**
      * Creates new form Dashboard
      */
@@ -22,12 +30,54 @@ public class Dashboard extends javax.swing.JFrame {
     int ctr = 0;
     public Dashboard() {
         initComponents();
+        Arrays.fill(friends, null);
+        getSQLFriends();
+        getSQLAddFList();
+        removeSelfName();
+    }    
        
-
-    
-    
+    public void getSQLFriends(){
+        try {
+            String get_friends = "(select friend_username from friend where username = ?) UNION (select username from friend where friend_username = ?)";
+            PreparedStatement st = MySQLConnection.getConnection().prepareStatement(get_friends);
+            st.setString(1, LoginPage.username);
+            st.setString(2, LoginPage.username);
+            ResultSet rs = st.executeQuery();
+            int i = 0;
+            while(rs.next()){
+             friends[i]=rs.getString(1);
+             i++;
+            }
+            jList3.setFixedCellWidth(130);
+            jList3.setListData(friends);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error fetchning from database");
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    void getSQLAddFList(){
+        try {
+            jComboBox1.removeAllItems();
+            String f_list = "select username from user where username not in (select friend_username from friend where username = '"+LoginPage.username+"' UNION select username from friend where friend_username = '"+LoginPage.username+"' and username <>'"+LoginPage.username+"')";
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(f_list);
+            ResultSet rs1 = st1.executeQuery();
+            while(rs1.next()){
+                jComboBox1.addItem(rs1.getString(1));
+            }
+        } catch (SQLException ex) {
+            System.out.println("select username from user where username not in (select friend_username from friend where username = '"+LoginPage.username+"' UNION select username from friend where friend_username = '"+LoginPage.username+"')");
+            JOptionPane.showMessageDialog(null, "Database error");
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+    }
+    public void removeSelfName(){
+        for(int i = 0; i<jComboBox1.getItemCount();i++){
+            check = jComboBox1.getItemAt(i);
+            if(check.equals(LoginPage.username))
+                jComboBox1.removeItemAt(i);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -295,31 +345,55 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        
-        DefaultListModel list = new DefaultListModel();
-     
-        newFriend = (String)jComboBox1.getSelectedItem();
-        friend_arr[ctr] = newFriend;
-        ctr++;
-        for(int i=0;i<ctr;i++)
-            list.addElement(friend_arr[i]);
-        
-        jList3.setModel(list);
+        try {
+            int i =0;
+            while(friends[i]!=null)
+                i++;
+            Object selected = jComboBox1.getSelectedItem();
+            friends[i]=selected.toString();
+            jList3.setListData(friends); 
+            String add_friend = "insert into friend values( ? , ? )";
+            PreparedStatement st = MySQLConnection.getConnection().prepareStatement(add_friend);
+            st.setString(1, LoginPage.username);
+            st.setString(2, selected.toString());
+            st.executeUpdate();
+            jComboBox1.removeItem(selected);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error in adding");
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        DefaultListModel l = (DefaultListModel)jList3.getModel();
-        int selectedIndex = jList3.getSelectedIndex();
-        if(selectedIndex!=-1){
-            l.remove(selectedIndex);// TODO add your handling code here:
-            // TODO add your handling code here:
-            for(int i=0;i<friend_arr.length;i++){
-                if(friend_arr[selectedIndex].equals(friend_arr[i])){
-                    for(int j=i;j<friend_arr.length-1;j++)
-                        friend_arr[j]=friend_arr[j+1];
-                    ctr--;
+            int i = jList3.getSelectedIndex();
+            String removed = friends[i];
+            System.out.println(friends.length);
+            if(i==0){
+                while(friends[i]!=null){
+                    friends[i]=friends[i+1];
+                    i++;
                 }
             }
+            friends[i]=null;
+            jList3.setListData(friends);
+            jComboBox1.addItem(removed);
+            try{
+            String rmv = "delete from friend where username = ? and friend_username = ? ";
+            String rmv2 ="delete from friend where friend_username = ? and username = ? ";
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(rmv);
+            st1.setString(1, LoginPage.username);
+            st1.setString(2, removed);
+            st1.executeUpdate();
+            PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(rmv2);
+            st2.setString(1, LoginPage.username);
+            st2.setString(2, removed);
+            st2.executeUpdate(); 
+            Dimension d1 = jList3.getPreferredSize();
+            jList3.setPreferredSize(d1);
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error in removing user");
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
             
     }//GEN-LAST:event_jButton8ActionPerformed
