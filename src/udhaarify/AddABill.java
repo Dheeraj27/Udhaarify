@@ -268,11 +268,13 @@ public class AddABill extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("American Typewriter", 0, 16)); // NOI18N
         jLabel3.setText("Date");
 
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
+        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        jFormattedTextField1.setToolTipText("d/M/yy");
 
         jLabel5.setFont(new java.awt.Font("American Typewriter", 0, 16)); // NOI18N
         jLabel5.setText("Bill amount");
 
+        jTextField3.setToolTipText("Enter valid bill amount");
         jTextField3.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField3FocusGained(evt);
@@ -290,8 +292,11 @@ public class AddABill extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("American Typewriter", 0, 16)); // NOI18N
         jLabel4.setText("Add notes");
 
+        jTextField2.setToolTipText("Enter description");
+
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
+        jTextArea2.setToolTipText("Enter notes");
         jScrollPane2.setViewportView(jTextArea2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
