@@ -1,11 +1,17 @@
 package udhaarify;
-
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.awt.event.ActionEvent;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 
 public class AddABill extends javax.swing.JFrame {
-
+    //dheeraj DBvariables
+    public String value1,value2,value3,value4;
+    public String amt,desc,notes,billdate,get_names,get_remaining_names;
+    //end of Dheeraj's variables
     static String[] peopleInBill;
     float amount[];
     static String[] final_string;
@@ -36,15 +42,40 @@ public class AddABill extends javax.swing.JFrame {
 
     public AddABill() {
         initComponents();
+        getMySQLDropDown();
         jComboBox3.setEnabled(false);
         jComboBox4.setEnabled(false);
-        
+        jComboBox1.setEnabled(true);
         jCheckBox1.setEnabled(false);
         jCheckBox2.setEnabled(false);
         jTextField1.setEnabled(false);
         jTextField8.setEnabled(false);
         jButton2.setEnabled(false);
         jButton5.setEnabled(false);
+    }
+ //Function to ger SQL Drop Down Working properly
+    private void getMySQLDropDown(){
+        try {
+            System.out.println("Reached here");
+            jComboBox1.removeAllItems();
+            get_names = "(select friend_username from friend where username = ?) UNION (select username from friend where friend_username = ?)";
+            PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(get_names);
+            st2.setString(1, LoginPage.username);
+            st2.setString(2, LoginPage.username);
+            String get_user = "select username from friend where username = ?";
+            PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(get_user);
+            st3.setString(1, LoginPage.username);
+            ResultSet rs1 = st3.executeQuery();
+            rs1.next();
+            jComboBox1.addItem(rs1.getString(1));
+            ResultSet rs = st2.executeQuery();
+            while (rs.next()){
+                jComboBox1.addItem(rs.getString(1));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error in fetching data");
+            Logger.getLogger(AddABill.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         final_string = new String[100];
         jButton7.setEnabled(false);
@@ -624,12 +655,52 @@ public class AddABill extends javax.swing.JFrame {
         // If amount[p] is negative, then i'th person will give  -amount[i]
 
         minCashflowRec(amount);
-        
-        JOptionPane.showMessageDialog(null, "Bill successfully added");
+        //SQLConnection here
+        amt = jTextField3.getText();
+        desc = jTextField2.getText();
+        notes = jTextArea2.getText();
+        billdate = jFormattedTextField1.getText();
+        try {
+            String bill_details = "insert into bill(bill_amt,description,notes,bill_date) values (?,?,?,?)";
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(bill_details);
+            st1.setString(1, amt);
+            st1.setString(2, desc);
+            st1.setString(3, notes);
+            st1.setString(4, billdate);
+            st1.executeUpdate();
+            //Debt
+            //Bill_Payer_Update
+            String get_bill_id = "select bill_id from bill where bill_ID = LAST_INSERT_ID()";
+            PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(get_bill_id);
+            ResultSet id = st3.executeQuery();
+            id.next();
+            int billID = id.getInt(1);
+            //billID is working properly
+            ListModel user = jList5.getModel();
+            ListModel amt = jList4.getModel();
+            ListModel userp = jList2.getModel();
+            ListModel amtp = jList3.getModel();
+            for(int i =0;i<user.getSize();i++){
+                value1 = user.getElementAt(i).toString();
+                value2 = amt.getElementAt(i).toString();
+                String Bill_Member_Update = "insert into bill_members values("+billID+",'"+value1+"','"+value2+"')";
+                PreparedStatement st4 = MySQLConnection.getConnection().prepareStatement(Bill_Member_Update);
+                st4.executeUpdate();
+            }
+            for(int i = 0; i<userp.getSize();i++){
+                value3 = userp.getElementAt(i).toString();
+                value4 = amtp.getElementAt(i).toString();
+                String Bill_Payers_Update = "insert into bill_payers values("+billID+",'"+value3+"','"+value4+"')";
+                PreparedStatement st5 = MySQLConnection.getConnection().prepareStatement(Bill_Payers_Update);
+                st5.executeUpdate();
+            }
+            JOptionPane.showMessageDialog(null, "Bill successfully added with Bill ID "+billID+"");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Database error");
+            ex.printStackTrace();
+        }
         this.dispose();
         new BillTransactions().setVisible(true);
-   
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -812,8 +883,6 @@ public class AddABill extends javax.swing.JFrame {
                    }
             }
                 
-        
-        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -1023,7 +1092,6 @@ if(jTextField2.getText().equals(""))
     }//GEN-LAST:event_jTextField3KeyReleased
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-  
         DefaultListModel l = (DefaultListModel)jList2.getModel();
         DefaultListModel m = (DefaultListModel)jList3.getModel();
         if(jList2.getSelectedIndex()==-1)

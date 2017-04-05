@@ -1,17 +1,23 @@
 package udhaarify;
 
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
-import static java.sql.JDBCType.NULL;
 import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
-
+import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.*;
+import java.awt.Desktop;
+import java.net.URI;
+import java.sql.*;
+import java.util.Arrays;
+import java.util.Vector;
+import javax.swing.ComboBoxModel;
 
 public class settleUp extends javax.swing.JFrame {
 
@@ -32,9 +38,17 @@ public class settleUp extends javax.swing.JFrame {
             }); 
 }
 });
+            getSQLData();
 }
+  void getSQLData(){
+        jComboBox1.removeAllItems();
+        int i=0;
+        while(Dashboard.friends[i]!=null){
+            jComboBox1.addItem(Dashboard.friends[i]);
+            i++;
+        }
+  }
   
-   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -217,9 +231,24 @@ public class settleUp extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-                       // TODO add your handling code here:
+       if(Desktop.isDesktopSupported())
+            {
+           try {
+               Desktop.getDesktop().browse(new URI("https://accounts.paytm.com/oauth2/authorize?theme=mp-web&redirect_uri=https%3A%2F%2Fpaytm.com%2Fv1%2Fapi%2Fcode&is_verification_excluded=false&client_id=paytm-web&type=web_server&scope=paytm&response_type=code#/login"));
+           } catch (IOException ex) {
+               Logger.getLogger(settleUp.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (URISyntaxException ex) {
+               Logger.getLogger(settleUp.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            }
+       JOptionPane.showConfirmDialog(null, "Was your transaction successful?");
+       int result = 0;
+       if(result == JOptionPane.YES_OPTION){
+           //insert query here
+           JOptionPane.showMessageDialog(null, "Transaction recorded");
+       }
     }//GEN-LAST:event_jButton3ActionPerformed
-
+        
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
       // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton3ActionPerformed
