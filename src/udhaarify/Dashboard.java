@@ -170,6 +170,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jButton3.setText("View Bills");
         jButton3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton5.setBackground(new java.awt.Color(51, 204, 255));
         jButton5.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
@@ -397,6 +402,11 @@ public class Dashboard extends javax.swing.JFrame {
         }
             
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.dispose();
+        new ViewBills().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

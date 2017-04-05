@@ -23,6 +23,19 @@ public class RegisterUser extends javax.swing.JFrame {
      */
     public RegisterUser() {
         initComponents();
+        jTextField1.setDocument
+        (new JTextFieldLimit(20));
+        jTextField2.setDocument
+        (new JTextFieldLimit(20));
+        jTextField5.setDocument
+        (new JTextFieldLimit(10));
+        jTextField4.setDocument(new JTextFieldLimit(20));
+        
+   
+   
+       
+     
+        
     }
 
     /**
