@@ -11,11 +11,12 @@ public class AddABill extends javax.swing.JFrame {
     //dheeraj DBvariables
     public String value1,value2,value3,value4;
     public String amt,desc,notes,billdate,get_names,get_remaining_names;
+    public static int billID;
     //end of Dheeraj's variables
     static String[] peopleInBill;
     float amount[];
     static String[] final_string;
-    static int counter = 0;
+    static int counter;
     String[] friend_arr;
     String newFriend;
     
@@ -36,7 +37,6 @@ public class AddABill extends javax.swing.JFrame {
     private int[] index_splitBy = new int[100];
     private float[] paidByAmount = new float[100];
     private float[] splitByAmount = new float[100];
-    
     int ctr1=0;
     int ctr2=0;
 
@@ -52,6 +52,21 @@ public class AddABill extends javax.swing.JFrame {
         jTextField8.setEnabled(false);
         jButton2.setEnabled(false);
         jButton5.setEnabled(false);
+        jButton6.setEnabled(false); //con
+        jComboBox1.setEnabled(false);//con
+        jButton10.setEnabled(false); //con
+        jButton3.setEnabled(false); //con
+        jButton7.setEnabled(false); //con
+        jButton8.setEnabled(false); //con
+        jButton11.setEnabled(false);  //con
+        jButton9.setEnabled(false);  //con
+        jList2.setEnabled(false);  //con    
+        jList5.setEnabled(false);   //con
+        jList1.setEnabled(false);   //con
+        jButton1.setEnabled(false); //con
+        
+        final_string = new String[100];
+        counter = 0;
     }
  //Function to ger SQL Drop Down Working properly
     private void getMySQLDropDown(){
@@ -77,7 +92,7 @@ public class AddABill extends javax.swing.JFrame {
             Logger.getLogger(AddABill.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        final_string = new String[100];
+        //final_string = new String[100];
         jButton7.setEnabled(false);
         jButton11.setEnabled(false);
         jButton10.setEnabled(false);
@@ -124,6 +139,7 @@ public class AddABill extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        jButton12 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jCheckBox2 = new javax.swing.JCheckBox();
         jComboBox3 = new javax.swing.JComboBox<>();
@@ -191,7 +207,7 @@ public class AddABill extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("Add friend");
+        jButton6.setText("Add");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -299,29 +315,41 @@ public class AddABill extends javax.swing.JFrame {
         jTextArea2.setToolTipText("Enter notes");
         jScrollPane2.setViewportView(jTextArea2);
 
+        jButton12.setText("Confirm");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(342, 342, 342))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(342, 342, 342))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton12)
+                        .addGap(243, 243, 243))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(26, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -337,7 +365,9 @@ public class AddABill extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38))
+                .addGap(3, 3, 3)
+                .addComponent(jButton12)
+                .addContainerGap())
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true), "Paid by", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("American Typewriter", 0, 18))); // NOI18N
@@ -679,7 +709,7 @@ public class AddABill extends javax.swing.JFrame {
             PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(get_bill_id);
             ResultSet id = st3.executeQuery();
             id.next();
-            int billID = id.getInt(1);
+            billID = id.getInt(1);
             //billID is working properly
             ListModel user = jList5.getModel();
             ListModel amt = jList4.getModel();
@@ -699,13 +729,13 @@ public class AddABill extends javax.swing.JFrame {
                 PreparedStatement st5 = MySQLConnection.getConnection().prepareStatement(Bill_Payers_Update);
                 st5.executeUpdate();
             }
-            JOptionPane.showMessageDialog(null, "Bill successfully added with Bill ID "+billID+"");
+            JOptionPane.showMessageDialog(null, "Bill successfully added with Bill ID "+ billID + "");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Database error");
             ex.printStackTrace();
         }
         this.dispose();
-        new BillTransactions().setVisible(true);
+        new BillTransactions(billID).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -717,6 +747,11 @@ public class AddABill extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+            jButton10.setEnabled(false);
+            jList1.setEnabled(false);
+            jList2.setEnabled(true);
+            jList5.setEnabled(true);
+
         ListModel model = jList1.getModel();
         if(model.getSize()!=0){
         
@@ -724,13 +759,19 @@ public class AddABill extends javax.swing.JFrame {
             jButton6.setEnabled(false);
             jList1.setEnabled(false);
             jComboBox3.setEnabled(true);
-            jComboBox4.setEnabled(true);
-            jCheckBox1.setEnabled(true);
+          //  jComboBox4.setEnabled(true);   //con
+           // jCheckBox1.setEnabled(true);   //con
             jCheckBox2.setEnabled(true);
             jTextField1.setEnabled(true);
-            jTextField8.setEnabled(true);
+          //  jTextField8.setEnabled(true);   //con
             jButton2.setEnabled(true);
-            jButton5.setEnabled(true);
+           // jButton5.setEnabled(true);//con
+           jComboBox1.setEnabled(false);  //con
+           jButton6.setEnabled(false);  //con
+           jList1.setEnabled(false);  //con
+           jButton10.setEnabled(false);  //con
+           jButton3.setEnabled(false);
+           jList2.setEnabled(true);  //con
 
 
              //extracting people from the list
@@ -768,7 +809,14 @@ public class AddABill extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        jButton10.setEnabled(true);
+        if(jComboBox1.getSelectedItem() == null){
+            JOptionPane.showMessageDialog(null, "Select a friend!");
+            return;
+        }
+        jList1.setEnabled(true);
+            jButton3.setEnabled(true);
+            jButton10.setEnabled(true);
+
         DefaultListModel list = new DefaultListModel();
         ListModel duplicates = jList1.getModel();
        
@@ -903,15 +951,27 @@ public class AddABill extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
                model2.removeAllElements();
                model3.removeAllElements(); 
+               jCheckBox2.setEnabled(true);
                
                friend_arr = new String[100];
                ctr1 = 0;
         }
         else{
         
+             jCheckBox1.setEnabled(true);  //con
+       jComboBox4.setEnabled(true);   //con
+       jTextField8.setEnabled(true);  //com
+       jButton5.setEnabled(true);  //comn
+       jButton11.setEnabled(true); //con
+       jList5.setEnabled(true);  //con
+       jButton7.setEnabled(false); //con
+       jButton2.setEnabled(false); //con
+       jTextField1.setEnabled(false);  //con
+       jComboBox3.setEnabled(false);  //con
         
             jList2.setEnabled(false);
             jList3.setEnabled(false);
+            jButton8.setEnabled(false);
             
 
             for(int i=0; i < size1; i++){
@@ -1023,12 +1083,20 @@ public class AddABill extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Total amount must match sum of individual amounts, retry!");
                model14.removeAllElements();
                model15.removeAllElements();
+               jCheckBox1.setEnabled(true);
                friend_arr = new String[100];
                ctr2 = 0;
         }
         else{
+             jCheckBox1.setEnabled(false);  //con
+        jComboBox4.setEnabled(false);  //con
+        jTextField8.setEnabled(false);   //con
+        jButton5.setEnabled(false);   //con
+        jButton11.setEnabled(false);   //con
+        jButton1.setEnabled(true);  //con
             jList4.setEnabled(false);
             jList5.setEnabled(false);
+            jButton9.setEnabled(false);
 
             ListModel model5 = jList5.getModel();
             size5 = model5.getSize();
@@ -1245,6 +1313,26 @@ int x;
     }          // TODO add your handling code here:
     }//GEN-LAST:event_jTextField8KeyReleased
 
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        if(jFormattedTextField1.getText().isEmpty() || jTextField3.getText().isEmpty()|| jTextField2.getText().isEmpty()){
+           JOptionPane.showMessageDialog(null,"Bill Description Fields Can't be Empty!");
+           
+       }
+     else{
+         jFormattedTextField1.setEnabled(false);
+         jTextField3.setEnabled(false);
+         jTextField2.setEnabled(false);
+         jTextArea2.setEnabled(false);
+         jButton6.setEnabled(true);
+         jComboBox1.setEnabled(true);
+         jButton12.setEnabled(false);
+         jList1.setEnabled(true); //con
+         
+        
+                 
+     }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton12ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1286,6 +1374,7 @@ int x;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1363,6 +1452,7 @@ int x;
             // If minimum is the maximum amount to be
             final_string[counter++] = peopleInBill[mxDebit]+ " has to pay " + (int)min + " to " + peopleInBill[mxCredit];
             System.out.println(final_string[counter-1]);
+            
             // Recur for the amount array.  Note that it is guaranteed that
             // the recursion would terminate as either amount[mxCredit] 
             // or  amount[mxDebit] becomes 0

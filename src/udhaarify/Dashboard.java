@@ -350,7 +350,11 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        try {
+        if(jComboBox1.getSelectedItem() == null){
+            JOptionPane.showMessageDialog(null, "No more registered users!");
+            return;
+        }
+          try {
             int i =0;
             while(friends[i]!=null)
                 i++;
@@ -370,7 +374,16 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-            int i = jList3.getSelectedIndex();
+            if(friends.length == 0){
+                JOptionPane.showMessageDialog(null, "Friend list empty!");
+                return;
+            }
+            if(jList3.getSelectedIndex() == -1){
+                JOptionPane.showMessageDialog(null, "Select/Add friend first!");
+                return;
+            }
+        
+        int i = jList3.getSelectedIndex();
             String removed = friends[i];
             System.out.println(friends.length);
             if(i==0){

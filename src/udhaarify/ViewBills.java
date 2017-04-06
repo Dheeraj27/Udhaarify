@@ -17,6 +17,10 @@ public class ViewBills extends javax.swing.JFrame {
     public ViewBills() {
         initComponents();
     }
+    public ViewBills(int id){
+        initComponents();
+        jComboBox1.setSelectedItem(id);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,9 +178,9 @@ public class ViewBills extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel11))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(66, 66, 66))
