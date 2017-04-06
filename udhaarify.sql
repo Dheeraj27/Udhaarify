@@ -23,12 +23,13 @@ DROP TABLE IF EXISTS `bill`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bill` (
-  `bill_ID` int(11) NOT NULL,
+  `BILL_ID` int(11) NOT NULL AUTO_INCREMENT,
   `bill_amt` int(11) DEFAULT NULL,
   `description` varchar(160) DEFAULT NULL,
   `notes` varchar(160) DEFAULT NULL,
-  PRIMARY KEY (`bill_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bill_date` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`BILL_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +38,7 @@ CREATE TABLE `bill` (
 
 LOCK TABLES `bill` WRITE;
 /*!40000 ALTER TABLE `bill` DISABLE KEYS */;
+INSERT INTO `bill` VALUES (1,300,'Enter description','',''),(2,2000,'Bill Description 1','RamTest','03/04/2017'),(3,300,'MyBillTest','It\'s my note','04/04/2017'),(4,2000,'BillTest','Bill addtest','04/04/2017'),(5,300,'Added Bill ID','note added','05/04/2017'),(6,600,'TestDesc','note1	','05/05/2017'),(7,600,'','',''),(8,600,'','',''),(9,900,'MergeTest','merge','01/05/2015'),(10,1500,'PayerTest','NotePayer','04/04/2017'),(11,2000,'Test2Payer','Payers test number 2','04/04/2017'),(12,2000,'Test2Payer','Payers test number 2','04/04/2017'),(13,2100,'Test3Payer','Payer3Test','05/04/2017'),(14,2000,'','',''),(15,2000,'TestIntegration','integration test 1','05/04/2017'),(16,900,'Integration Merge Test 8','merge8	','05/04/2017');
 /*!40000 ALTER TABLE `bill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +52,9 @@ DROP TABLE IF EXISTS `bill_members`;
 CREATE TABLE `bill_members` (
   `bill_ID` int(11) DEFAULT NULL,
   `username` varchar(20) DEFAULT NULL,
-  `amount` int(11) DEFAULT NULL
+  `amount` int(11) DEFAULT NULL,
+  KEY `bill_ID` (`bill_ID`),
+  CONSTRAINT `bill_members_ibfk_1` FOREIGN KEY (`bill_ID`) REFERENCES `bill` (`BILL_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -60,6 +64,7 @@ CREATE TABLE `bill_members` (
 
 LOCK TABLES `bill_members` WRITE;
 /*!40000 ALTER TABLE `bill_members` DISABLE KEYS */;
+INSERT INTO `bill_members` VALUES (1,'dheeraj',100),(1,'ayushman',100),(1,'Hi_Tea',100),(2,'dheeraj',667),(2,'Hi_Tea',667),(2,'ayushman',667),(3,'coldplay',100),(3,'raghu',100),(3,'Hi_Tea',100),(4,'dheeraj',667),(4,'raju',667),(4,'coldplay',667),(5,'coldplay',60),(5,'raghu',60),(5,'Hi_Tea',60),(5,'raju',60),(5,'ayushman',60),(6,'coldplay',200),(6,'raghu',200),(6,'Hi_Tea',200),(7,'raju',300),(7,'Hi_Tea',300),(8,'Hi_Tea',600),(9,'coldplay',300),(9,'dheeraj',300),(9,'raghu',300),(10,'raghu',375),(11,'dheeraj',667),(12,'dheeraj',667),(13,'Hi_Tea',500),(13,'ayushman',600),(13,'raju',900),(13,'dheeraj',100),(14,'dheeraj',500),(14,'raju',500),(14,'raghu',500),(14,'Hi_Tea',500),(15,'ayushman',1000),(15,'dheeraj',1000),(16,'coldplay',225),(16,'ayushman',225),(16,'Hi_Tea',225),(16,'dheeraj',225);
 /*!40000 ALTER TABLE `bill_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,9 +77,8 @@ DROP TABLE IF EXISTS `bill_payers`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bill_payers` (
   `bill_id` int(11) DEFAULT NULL,
-  `bill_amt` int(11) DEFAULT NULL,
-  `description` varchar(160) DEFAULT NULL,
-  `notes` varchar(160) DEFAULT NULL
+  `username` varchar(20) DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,7 +88,31 @@ CREATE TABLE `bill_payers` (
 
 LOCK TABLES `bill_payers` WRITE;
 /*!40000 ALTER TABLE `bill_payers` DISABLE KEYS */;
+INSERT INTO `bill_payers` VALUES (11,'dheeraj',2000),(12,'dheeraj',2000),(13,'Hi_Tea',1100),(13,'raju',400),(13,'dheeraj',600),(14,'Hi_Tea',500),(14,'raghu',500),(14,'raju',500),(14,'dheeraj',500),(15,'ayushman',2000),(16,'Hi_Tea',200),(16,'ayushman',200),(16,'coldplay',200),(16,'dheeraj',300);
 /*!40000 ALTER TABLE `bill_payers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `debt`
+--
+
+DROP TABLE IF EXISTS `debt`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `debt` (
+  `payer` varchar(20) DEFAULT NULL,
+  `payee` varchar(20) DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `debt`
+--
+
+LOCK TABLES `debt` WRITE;
+/*!40000 ALTER TABLE `debt` DISABLE KEYS */;
+/*!40000 ALTER TABLE `debt` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -106,33 +134,8 @@ CREATE TABLE `friend` (
 
 LOCK TABLES `friend` WRITE;
 /*!40000 ALTER TABLE `friend` DISABLE KEYS */;
+INSERT INTO `friend` VALUES ('ayushman','Hi_Tea'),('coldplay','ayushman'),('raju','raghu'),('raju','ayushman'),('dheeraj','raghu'),('dheeraj','ayushman'),('dheeraj','raju'),('coldplay','Hi_Tea'),('coldplay','dheeraj'),('coldplay','raghu');
 /*!40000 ALTER TABLE `friend` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `groups`
---
-
-DROP TABLE IF EXISTS `groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `groups` (
-  `GROUP_ID` int(11) NOT NULL,
-  `G_NAME` varchar(20) DEFAULT NULL,
-  `USERNAME` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`GROUP_ID`),
-  KEY `USERNAME` (`USERNAME`),
-  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`USERNAME`) REFERENCES `user` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `groups`
---
-
-LOCK TABLES `groups` WRITE;
-/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -143,9 +146,11 @@ DROP TABLE IF EXISTS `transaction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transaction` (
+  `t_id` int(11) NOT NULL AUTO_INCREMENT,
   `payer` varchar(20) DEFAULT NULL,
   `payee` varchar(20) DEFAULT NULL,
-  `amount` int(11) DEFAULT NULL
+  `amount` int(11) DEFAULT NULL,
+  PRIMARY KEY (`t_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -156,29 +161,6 @@ CREATE TABLE `transaction` (
 LOCK TABLES `transaction` WRITE;
 /*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
 /*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `udhaar`
---
-
-DROP TABLE IF EXISTS `udhaar`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `udhaar` (
-  `payer` varchar(20) DEFAULT NULL,
-  `payee` varchar(20) DEFAULT NULL,
-  `amount` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `udhaar`
---
-
-LOCK TABLES `udhaar` WRITE;
-/*!40000 ALTER TABLE `udhaar` DISABLE KEYS */;
-/*!40000 ALTER TABLE `udhaar` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -206,7 +188,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('ayushman','Ayushman Dey',9876543211,'ayushman@gmail.com','rajugandu','raju'),('coldplay','Chris Martin',1212121212,'coldplay@gmail.com','password','coldplay'),('dheeraj','Dheeraj Lalwani',9822606233,'dlalwani95@gmail.com','dheeraj','hint1'),('Hi_Tea','Sarthak Kukreja',9899234567,'sarthak@gmail.com','sarthak123','sarthak123'),('raghu','Raghu Tiwari',8888804088,'raghu@gmail.com','raghu123','123raghu'),('raju','Aditya Raji',9898989898,'raju@gmail.com','rajugandu','123raju');
+INSERT INTO `user` VALUES ('ayushman','Ayushman Dey',9876543211,'ayushman@gmail.com','rajugandu','raju'),('coldplay','Chris Martin',1212121212,'coldplay@gmail.com','password','coldplay'),('dheeraj','Dheeraj Lalwani',7706979285,'dlalwani95@gmail.com','dheeraj','dheeraj'),('Hi_Tea','Sarthak Kukreja',9899234567,'sarthak@gmail.com','sarthak123','sarthak123'),('raghu','Raghu Tiwari',8888804088,'raghu@gmail.com','raghu123','123raghu'),('raju','Aditya Raji',9898989898,'raju@gmail.com','rajugandu','123raju');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -219,4 +201,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-30 22:29:10
+-- Dump completed on 2017-04-05 16:53:21

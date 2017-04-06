@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+
 /**
  *
  * @author ayushmandey
@@ -24,11 +25,13 @@ public class ViewBills extends javax.swing.JFrame {
     String [] billPayers = new String[20];;
     String [] billPayers_amount = new String[20];
     String [] share = new String[20];
+
     /**
      * Creates new form ViewBills
      */
     public ViewBills() {
         initComponents();
+
         initBillIDs();
     }
     public void initBillIDs(){
@@ -45,6 +48,7 @@ public class ViewBills extends javax.swing.JFrame {
         }
     
 }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,11 +94,13 @@ public class ViewBills extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("American Typewriter", 0, 14)); // NOI18N
         jButton1.setText("Get Bill Information");
+
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true), "People in the Bill", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("American Typewriter", 0, 18))); // NOI18N
 
@@ -312,6 +318,7 @@ public class ViewBills extends javax.swing.JFrame {
         this.dispose();
         new Dashboard().setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Arrays.fill(bill_members, null);

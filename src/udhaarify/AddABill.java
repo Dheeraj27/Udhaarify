@@ -709,7 +709,7 @@ public class AddABill extends javax.swing.JFrame {
             PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(get_bill_id);
             ResultSet id = st3.executeQuery();
             id.next();
-            int billID = id.getInt(1);
+            billID = id.getInt(1);
             //billID is working properly
             ListModel user = jList5.getModel();
             ListModel amt = jList4.getModel();
