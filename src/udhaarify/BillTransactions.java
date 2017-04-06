@@ -148,7 +148,9 @@ public class BillTransactions extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         id =  Integer.parseInt(jLabel3.getText().toString());     // TODO add your handling code here:
         this.dispose();
-        new ViewBills(id).setVisible(true);
+
+        new ViewBills().setVisible(true);
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

@@ -4,23 +4,50 @@
  * and open the template in the editor.
  */
 package udhaarify;
+import java.sql.*;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 
 /**
  *
  * @author ayushmandey
  */
 public class ViewBills extends javax.swing.JFrame {
+    //dheeraj DB variables
+    String getBills;
+    String get_bill_info;
+    String bill_id;
+    String [] bill_members = new String[20];
+    String [] billPayers = new String[20];;
+    String [] billPayers_amount = new String[20];
+    String [] share = new String[20];
 
     /**
      * Creates new form ViewBills
      */
     public ViewBills() {
         initComponents();
+
+        initBillIDs();
     }
-    public ViewBills(int id){
-        initComponents();
-        jComboBox1.setSelectedItem(id);
-    }
+    public void initBillIDs(){
+        try {
+            getBills = "select bill_id from bill_members where username = ?";
+            PreparedStatement st = MySQLConnection.getConnection().prepareStatement(getBills);
+            st.setString(1, LoginPage.username);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                jComboBox1.addItem(rs.getInt(1)+"");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewBills.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,6 +94,13 @@ public class ViewBills extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("American Typewriter", 0, 14)); // NOI18N
         jButton1.setText("Get Bill Information");
+
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true), "People in the Bill", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("American Typewriter", 0, 18))); // NOI18N
 
@@ -284,6 +318,76 @@ public class ViewBills extends javax.swing.JFrame {
         this.dispose();
         new Dashboard().setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Arrays.fill(bill_members, null);
+        Arrays.fill(share, null);
+        Arrays.fill(billPayers, null);
+        Arrays.fill(billPayers_amount, null);
+        if(jComboBox1.getSelectedItem()==null){
+            JOptionPane.showMessageDialog(null, "You don't have any existing bills");
+            return;
+        }
+        try {
+            System.out.println("Here!");
+            bill_id = jComboBox1.getSelectedItem().toString();
+            get_bill_info = "select * from bill natural join bill_members where bill_id = ? and username = ? ";
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(get_bill_info);
+            st1.setString(1, bill_id);
+            st1.setString(2, LoginPage.username);
+            ResultSet rs = st1.executeQuery();
+            rs.next();
+            jLabel8.setText(rs.getString(2));
+            jLabel9.setText(rs.getString(5));
+            jLabel10.setText(rs.getString(3));
+            jLabel11.setText(rs.getString(4));
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewBills.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //To get data for tables
+        jList2.setFixedCellWidth(177);
+        jList1.setFixedCellWidth(167);
+        jList4.setFixedCellWidth(141);
+        jList3.setFixedCellWidth(81);
+        jList5.setFixedCellWidth(81);
+        
+        try{
+        String memberdata = "select * from bill_members where bill_id = ? ";
+        System.out.println("Here too!");
+        PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(memberdata);
+        st2.setString(1, bill_id);
+        ResultSet rs1 = st2.executeQuery();
+        int i = 0;
+        while(rs1.next()){
+            bill_members[i]= rs1.getString(2);
+            share[i] = rs1.getString(3);
+            i++;
+        }
+        String payerdata = "select * from bill_payers where bill_ID ="+bill_id+"";
+        PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(payerdata);
+        ResultSet rs2 = st3.executeQuery();
+        int j=0;
+        while(rs2.next()){
+            billPayers[j]=rs2.getString(2);
+            billPayers_amount[j]=rs2.getString(3);
+            System.out.println(billPayers[j] + "   " + billPayers_amount[j]);
+            j++;
+        }
+        jList2.setListData(bill_members);
+        jList4.setListData(bill_members);
+        jList5.setListData(share);
+        jList1.setListData(billPayers);
+        jList3.setListData(billPayers_amount);
+        }catch (SQLException ex) {
+            Logger.getLogger(ViewBills.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+    }                                          
 
     /**
      * @param args the command line arguments

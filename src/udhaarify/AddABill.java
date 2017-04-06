@@ -9,7 +9,7 @@ import javax.swing.ListModel;
 
 public class AddABill extends javax.swing.JFrame {
     //dheeraj DBvariables
-    public String value1,value2,value3,value4;
+    public String value1,value2,value3,value4,payee,payer;
     public String amt,desc,notes,billdate,get_names,get_remaining_names;
     public static int billID;
     //end of Dheeraj's variables
@@ -1451,6 +1451,7 @@ int x;
 
             // If minimum is the maximum amount to be
             final_string[counter++] = peopleInBill[mxDebit]+ " has to pay " + (int)min + " to " + peopleInBill[mxCredit];
+            add_into_debt(peopleInBill[mxDebit],peopleInBill[mxCredit],(int)min);
             System.out.println(final_string[counter-1]);
             
             // Recur for the amount array.  Note that it is guaranteed that
@@ -1483,5 +1484,49 @@ int x;
         {
             return (x<=y)? x: y;
         }
+        void add_into_debt(String p1, String p2, int at){
+        try {
+            int o_debt = 0;
+            int o_debt2 = 0;
+            String old_debt = "select amount from debt where payer = ? and payee = ? ";
+            PreparedStatement old = MySQLConnection.getConnection().prepareStatement(old_debt);
+            old.setString(1, p1);
+            old.setString(2, p2);
+            int n_debt = at;
+            ResultSet rs1 = old.executeQuery();
+            if(rs1.next()){
+                o_debt = rs1.getInt(1);
+                int ins_debt = n_debt + o_debt;
+                String updateDebt = "update debt set amount = ? where payer = ? and payee = ?";
+                PreparedStatement update = MySQLConnection.getConnection().prepareStatement(updateDebt);
+                update.setString(1,ins_debt+"");
+                update.setString(2, p1);
+                update.setString(3, p2);
+                update.executeUpdate();
+                return;
 }
-   
+            String old_debt2 = "select amount from debt where payer = ? and payee = ? ";
+            PreparedStatement old2 = MySQLConnection.getConnection().prepareStatement(old_debt2);
+            old2.setString(1, p2);
+            old2.setString(2, p1);
+            ResultSet rs2 = old2.executeQuery();
+            int n_debt2 = at;
+            if(rs2.next()){
+                o_debt2 = rs2.getInt(1);
+                int ins_debt2 = o_debt2 - n_debt2;
+                String updateDebt2 = "update debt set amount = ? where payer = ? and payee = ? ";
+                PreparedStatement update2 = MySQLConnection.getConnection().prepareStatement(updateDebt2);
+                update2.setString(1, ins_debt2+"");
+                update2.setString(2, p2);
+                update2.setString(3, p1);
+                update2.executeUpdate();
+                return;
+            }
+            String newEntry = "insert into debt values('" + p1 + "','"+ p2 +"'," + at + ")";
+            PreparedStatement nEntry = MySQLConnection.getConnection().prepareStatement(newEntry);
+            nEntry.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddABill.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+}
