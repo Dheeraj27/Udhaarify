@@ -20,7 +20,9 @@ import javax.swing.ListModel;
 public class Dashboard extends javax.swing.JFrame {
 
     //dheeraj DB variables
-    public static String[] friends = new String[20];
+    public static String[] friends;
+    public String[] owe;
+    public String[] owes;
     String check;
     /**
      * Creates new form Dashboard
@@ -30,11 +32,73 @@ public class Dashboard extends javax.swing.JFrame {
     int ctr = 0;
     public Dashboard() {
         initComponents();
+        friends = new String[20];
+        owe = new String[20];
+        owes = new String[20];
         Arrays.fill(friends, null);
+        Arrays.fill(owe, null);
+        Arrays.fill(owes, null);
         getSQLFriends();
         getSQLAddFList();
         removeSelfName();
+        getDebtData();
     }    
+       
+    public void getDebtData(){
+        try {
+            int i=0;
+            int j=0;
+            String owe_data = "select payee,amount from debt where payer = ?";
+            PreparedStatement st = MySQLConnection.getConnection().prepareStatement(owe_data);
+            st.setString(1, LoginPage.username);
+            ResultSet rs = st.executeQuery();
+                int at1 = 0;
+                String frnd;
+                String addString1;
+                jList2.setFixedCellWidth(216);       
+            while(rs.next()){
+                frnd = rs.getString(1);
+                at1 = rs.getInt(2);
+                if(at1<0){
+                    at1*=-1;
+                    owes[j]= frnd+" owes you "+at1;
+                    j++;
+                    continue;
+                }
+                addString1 = "You owe "+at1+" to "+frnd;  
+                owe[i]=addString1;
+                i++;
+            }
+            jList2.setListData(owe); 
+            String owes_data = "select payer,amount from debt where payee = ?";
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(owes_data);
+            st1.setString(1, LoginPage.username);
+            ResultSet rs1 = st1.executeQuery();
+                int at2 = 0;
+                String frnd2;
+                String addString2;
+                jList1.setFixedCellWidth(216);       
+            while(rs1.next()){
+                frnd2 = rs1.getString(1);
+                at2 = rs1.getInt(2);
+                if(at2<0){
+                    at2*=-1;
+                    owe[i]="You owe "+at2+" to "+frnd2;
+                    i++;
+                    continue;
+                }
+                addString2 = frnd2+" owes you "+at2;  
+                owes[j]=addString2;
+                j++;
+            }
+            jList1.setListData(owes);
+        } catch (SQLException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        
+        
+    
        
     public void getSQLFriends(){
         try {
@@ -170,6 +234,11 @@ public class Dashboard extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
         jButton3.setText("View Bills");
         jButton3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton5.setBackground(new java.awt.Color(51, 204, 255));
         jButton5.setFont(new java.awt.Font("American Typewriter", 0, 18)); // NOI18N
@@ -345,7 +414,11 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        try {
+        if(jComboBox1.getSelectedItem() == null){
+            JOptionPane.showMessageDialog(null, "No more registered users!");
+            return;
+        }
+          try {
             int i =0;
             while(friends[i]!=null)
                 i++;
@@ -365,7 +438,16 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-            int i = jList3.getSelectedIndex();
+            if(friends.length == 0){
+                JOptionPane.showMessageDialog(null, "Friend list empty!");
+                return;
+            }
+            if(jList3.getSelectedIndex() == -1){
+                JOptionPane.showMessageDialog(null, "Select/Add friend first!");
+                return;
+            }
+        
+        int i = jList3.getSelectedIndex();
             String removed = friends[i];
             System.out.println(friends.length);
             if(i==0){
@@ -397,6 +479,11 @@ public class Dashboard extends javax.swing.JFrame {
         }
             
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.dispose();
+        new ViewBills().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
