@@ -25,6 +25,8 @@ public class Dashboard extends javax.swing.JFrame {
     public String[] owe;
     public String[] owes;
     String check;
+    String selected;
+    String debugString;
     /**
      * Creates new form Dashboard
      */
@@ -36,17 +38,30 @@ public class Dashboard extends javax.swing.JFrame {
         friends = new String[20];
         owe = new String[20];
         owes = new String[20];
+        debugString = " ";
         Arrays.fill(friends, null);
         Arrays.fill(owe, null);
         Arrays.fill(owes, null);
-        friends[0]="    ";
+        friends[0]=debugString;
         removeZeroDebts();
         getSQLFriends();
         getSQLAddFList();
         removeSelfName();
         getDebtData();
+        ButtonsCheck();
     }    
-       
+    public void ButtonsCheck(){
+        if(friends[0].equals(debugString)){
+            jButton8.setEnabled(false);
+            jButton1.setEnabled(false);
+            jButton2.setEnabled(false);
+        }
+        else{
+            jButton8.setEnabled(true);
+            jButton1.setEnabled(true);
+            jButton2.setEnabled(true);
+        }
+    }
     public void getDebtData(){
         try {
             int i=0;
@@ -132,7 +147,6 @@ public class Dashboard extends javax.swing.JFrame {
                 jComboBox1.addItem(rs1.getString(1));
             }
         } catch (SQLException ex) {
-            System.out.println("select username from user where username not in (select friend_username from friend where username = '"+LoginPage.username+"' UNION select username from friend where friend_username = '"+LoginPage.username+"')");
             JOptionPane.showMessageDialog(null, "Database error");
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -407,20 +421,24 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        if(friends[0]=="    "){
-            friends[0]=null;
-        }
-        if(jComboBox1.getSelectedItem() == null){
+        
+          try {
+              if(jComboBox1.getSelectedItem() == null){
             JOptionPane.showMessageDialog(null, "No more registered users!");
             return;
-        }
-          try {
-            int i =0;
-            while(friends[i]!=null)
+             }
+              if(friends[0]==(debugString)){
+                friends[0]=null;
+              }
+            int i=0;
+            while(friends[i]!=null){
                 i++;
-            Object selected = jComboBox1.getSelectedItem();
-            friends[i]=selected.toString();
+            }
+                selected = jComboBox1.getSelectedItem().toString();
+                friends[i]=selected;
+                ButtonsCheck();
             jList3.setListData(friends);
+            //QUERY PART
             String add_friend = "insert into friend values( ? , ? )";
             PreparedStatement st = MySQLConnection.getConnection().prepareStatement(add_friend);
             st.setString(1, LoginPage.username);
@@ -439,23 +457,40 @@ public class Dashboard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Select/Add friend first!");
                 return;
             }
-        
-        int i = jList3.getSelectedIndex();
+            int i = jList3.getSelectedIndex();
             String removed = friends[i];
-            if(removed=="   "){
-                JOptionPane.showMessageDialog(null, "Friend list empty!");
+            if(removed.equals(debugString)){
+             JOptionPane.showMessageDialog(null, "No friends to remove");
                 return;
             }
-            if(i==0){
+            removed = friends[i];
+            //Friend-Transaction check
+            String query = "select * from debt where payer = ? and payee = ? UNION select * from debt where payer = ? and payee = ?";
+        try {
+            PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(query);
+            st1.setString(1, removed);
+            st1.setString(2, LoginPage.username);
+            st1.setString(3, LoginPage.username);
+            st1.setString(4, removed);
+            ResultSet rs = st1.executeQuery();
+            if(rs.next()){
+                JOptionPane.showMessageDialog(null, "You need to clear your debts with "+removed+" before removing them as a friend");
+                return;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+                jButton8.setVisible(true);
                 while(friends[i]!=null){
                     friends[i]=friends[i+1];
                     i++;
                 }
-            }
             friends[i]=null;
+            
+            jComboBox1.addItem(removed);
             jList3.setListData(friends);
-            if(removed!="   ")
-                jComboBox1.addItem(removed);
+             //Query here
             try{
             String rmv = "delete from friend where username = ? and friend_username = ? ";
             String rmv2 ="delete from friend where friend_username = ? and username = ? ";
@@ -472,7 +507,8 @@ public class Dashboard extends javax.swing.JFrame {
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
             if(friends[0]==null){
-                friends[0]="   ";
+                friends[0]=debugString;
+                ButtonsCheck();
                 jList3.setListData(friends);
             }
             

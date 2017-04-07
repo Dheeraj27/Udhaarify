@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 public class AccountSettingsPage extends javax.swing.JFrame {
     
     public String name;
@@ -70,6 +71,11 @@ public class AccountSettingsPage extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(255, 255, 255));
         jButton4.setForeground(new java.awt.Color(255, 51, 51));
         jButton4.setText("Delete account");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true), "Displaying account details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("American Typewriter", 0, 24))); // NOI18N
 
@@ -149,7 +155,7 @@ public class AccountSettingsPage extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 220, Short.MAX_VALUE)
+            .addGap(0, 224, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
@@ -350,7 +356,7 @@ public class AccountSettingsPage extends javax.swing.JFrame {
             String new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
             while(new_phone.length()!=10){
                 JOptionPane.showMessageDialog(null,"Invalid phone number, enter again!");
-                new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
+                new_phone = JOptionPane.showInputDialog(null,  "Enter new phone number ");
             }
             String update_phone = "update user set phone = ? where username = ?";
             PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(update_phone);
@@ -364,6 +370,58 @@ public class AccountSettingsPage extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Database error");
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        int result = JOptionPane.showConfirmDialog(null,"Are you sure?");
+        if(result == JOptionPane.YES_OPTION){
+            try {
+                String password = null;
+                JPasswordField passwordField = new JPasswordField();
+                Object[] obj = {"Please enter the password:\n\n", passwordField};
+                Object stringArray[] = {"OK","Cancel"};
+                if (JOptionPane.showOptionDialog(null, obj, "Need password",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, stringArray, obj) == JOptionPane.YES_OPTION)
+                password = new String(passwordField.getPassword());
+                String pcheck = "select password from user where username = ?";
+                PreparedStatement st = MySQLConnection.getConnection().prepareStatement(pcheck);
+                st.setString(1, LoginPage.username);
+                ResultSet rs = st.executeQuery();
+                rs.next();
+                String pass1 = rs.getString(1);
+                if(pass1.equals(password)){
+                    String tcheck = "select * from debt where payer = ? or payee = ?";
+                    PreparedStatement st1 = MySQLConnection.getConnection().prepareStatement(tcheck);
+                    st1.setString(1, LoginPage.username);
+                    st1.setString(2, LoginPage.username);
+                    ResultSet rs1 = st1.executeQuery();
+                    if(rs1.next()){
+                        JOptionPane.showMessageDialog(null, "Please clear your debts before deleting your account");
+                        return;
+                    }
+                    else{
+                        String delAcc = "delete from user where username = ?";
+                        PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(delAcc);
+                        st2.setString(1, LoginPage.username);
+                        st2.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Account Deleted");
+                        this.dispose();
+                        new LoginPage().setVisible(true);
+                        return;
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Incorrect Password");
+                }                
+            } catch (SQLException ex) {
+                //Logger.getLogger(AccountSettingsPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+        }
+        else
+            return;
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public void getMySQLData(){
         try {

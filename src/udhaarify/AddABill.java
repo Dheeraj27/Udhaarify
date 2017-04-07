@@ -71,7 +71,6 @@ public class AddABill extends javax.swing.JFrame {
  //Function to ger SQL Drop Down Working properly
     private void getMySQLDropDown(){
         try {
-            System.out.println("Reached here");
             jComboBox1.removeAllItems();
             get_names = "(select friend_username from friend where username = ?) UNION (select username from friend where friend_username = ?)";
             PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(get_names);
@@ -88,8 +87,7 @@ public class AddABill extends javax.swing.JFrame {
                 jComboBox1.addItem(rs.getString(1));
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error in fetching data");
-            Logger.getLogger(AddABill.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(AddABill.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         //final_string = new String[100];
@@ -1364,6 +1362,7 @@ int x;
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new AddABill().setVisible(true);
+                
             }
         });
     }
