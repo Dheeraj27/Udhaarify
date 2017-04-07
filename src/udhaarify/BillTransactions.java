@@ -51,6 +51,7 @@ public class BillTransactions extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        jList1.setOpaque(false);
         jScrollPane2.setViewportView(jList1);
 
         jButton1.setText("Add another bill");

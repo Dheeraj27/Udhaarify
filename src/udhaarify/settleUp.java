@@ -238,9 +238,9 @@ public class settleUp extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addComponent(jButton1)
                 .addGap(17, 17, 17))
@@ -356,8 +356,7 @@ public class settleUp extends javax.swing.JFrame {
             jButton2.setEnabled(true);
 
             jComboBox1.setEnabled(false);        // TODO add your handling code here:
-            jRadioButton3.setText("I am paying " + jComboBox1.getSelectedItem().toString());
-            jRadioButton4.setText("I am getting paid by " + jComboBox1.getSelectedItem().toString());
+          
         }
 
     }//GEN-LAST:event_jButton4ActionPerformed
