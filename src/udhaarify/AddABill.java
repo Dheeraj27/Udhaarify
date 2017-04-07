@@ -1429,10 +1429,7 @@ int x;
             // So if there is a positive value in amount[], then there must
             // be a negative value
             
-            //for tracking transactional steps
-            /*for(int i=0;i<size;i++)
-             System.out.print(amount[i] + " "); //debug
-             System.out.println();*/
+           
             
             int mxCredit = getMax(amount), mxDebit = getMin(amount);
             
@@ -1451,7 +1448,6 @@ int x;
             // If minimum is the maximum amount to be
             final_string[counter++] = peopleInBill[mxDebit]+ " has to pay " + (int)min + " to " + peopleInBill[mxCredit];
             add_into_debt(peopleInBill[mxDebit],peopleInBill[mxCredit],(int)min);
-            System.out.println(final_string[counter-1]);
             
             // Recur for the amount array.  Note that it is guaranteed that
             // the recursion would terminate as either amount[mxCredit] 

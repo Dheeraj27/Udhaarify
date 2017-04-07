@@ -150,8 +150,13 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
         if(jTextField1.getText().toString().isEmpty()){
             JOptionPane.showMessageDialog(null,"Please enter a username.");
+            return;
+        }
+        if(jTextField1.getText().toString().contains(" ")){
+            JOptionPane.showMessageDialog(null,"Username cannot contain spaces!");
             return;
         }
         try {
@@ -174,7 +179,12 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         
         String password1 = new String(jPasswordField1.getPassword());
+        if(password1.contains(" ")){
+            JOptionPane.showMessageDialog(null, "Password cannot contain spaces!");
+            return;
+        }
         if(jTextField1.getText().isEmpty() || password1.equals("")){
             JOptionPane.showMessageDialog(null,"Username or password field cannot be empty!");
             return;

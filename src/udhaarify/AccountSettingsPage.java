@@ -324,6 +324,10 @@ public class AccountSettingsPage extends javax.swing.JFrame {
         String pass2 = new String(jPasswordField2.getPassword());
         String new_hint = jTextField4.getText();
         if(pass1.equals(pass2)){
+            if(pass1.contains(" ")){
+                JOptionPane.showMessageDialog(null, "Password field cannot contain spaces!");
+                return;
+            }
             try {
                 String update_pass = "update user set password = ? , pass_hint = ? where username = ?";
                 PreparedStatement st3 = MySQLConnection.getConnection().prepareStatement(update_pass);
@@ -356,7 +360,12 @@ public class AccountSettingsPage extends javax.swing.JFrame {
             String new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
             while(new_phone.length()!=10){
                 JOptionPane.showMessageDialog(null,"Invalid phone number, enter again!");
-                new_phone = JOptionPane.showInputDialog(null,  "Enter new phone number ");
+
+                new_phone = JOptionPane.showInputDialog(null, "Enter new phone number ");
+                if (new_phone == null){
+                    return;
+                }
+
             }
             String update_phone = "update user set phone = ? where username = ?";
             PreparedStatement st2 = MySQLConnection.getConnection().prepareStatement(update_phone);
@@ -366,8 +375,7 @@ public class AccountSettingsPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Phone number updated!");
             jLabel13.setText(new_phone);        
         } catch (SQLException ex) {
-                System.out.println("Database error");
-                JOptionPane.showMessageDialog(null, "Database error");
+                JOptionPane.showMessageDialog(null, "Please enter the number in correct format!");
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -438,7 +446,6 @@ public class AccountSettingsPage extends javax.swing.JFrame {
             jLabel13.setText(phone);
             jLabel15.setText(email);
         } catch (SQLException ex) {
-            System.out.println("SQL Error");
             JOptionPane.showMessageDialog(null, "Database error");
         }
          

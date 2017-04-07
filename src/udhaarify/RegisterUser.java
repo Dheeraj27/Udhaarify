@@ -254,8 +254,12 @@ public class RegisterUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Invalid phone number, enter again!"); 
         }
         else if(!password1.equals(password2)){
-            JOptionPane.showMessageDialog(null,"Password and Confirm Password DO NOT MATCH!");
+            JOptionPane.showMessageDialog(null,"Password and Confirm Password do not match!");
             
+        }
+        else if(password1.contains(" ") || password2.contains(" ")){
+            JOptionPane.showMessageDialog(null,"Password and Confirm Password do not match!");
+            return;
         }
    
     
