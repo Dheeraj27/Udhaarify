@@ -24,8 +24,14 @@ public class settleUp extends javax.swing.JFrame {
     /**
      * Creates new form settleUp
      */
+    public int flag;
+    // flag = 1 => I'm getting paid
+    // flag = 0 => I'm paying   
+    public int DBFlag;
+    // DBFlag = 0 => payer
+    // DBFlag = 1 => payee
+    String friend = new String();
     public settleUp() {
-        
         initComponents();
           jButton3.setEnabled(false);  
                             
@@ -46,6 +52,8 @@ public class settleUp extends javax.swing.JFrame {
             jButton2.setEnabled(false);
             jButton3.setEnabled(false);
             getSQLData();
+            flag = -1;
+            DBFlag = -1;
 }
   void getSQLData(){
         jComboBox1.removeAllItems();
@@ -55,7 +63,107 @@ public class settleUp extends javax.swing.JFrame {
             i++;
         }
   }
+  void doTransaction(){
+      if(jRadioButton3.isSelected() == true)
+            flag = 0;
+        else
+            flag = 1;
+        try {
   
+            friend = jComboBox1.getSelectedItem().toString();
+            int tAmount = Integer.parseInt(jTextField1.getText());
+            // flag = 1 => I'm getting paid
+            // flag = 0 => I'm paying
+            // DBFlag = 0 => payer
+            // DBFlag = 1 => payee
+            //Getting old debt first to get DBFlag value
+            int old_debt;
+            int new_debt;
+                       
+            String getOldDebt1 = "select amount from debt where payer = ? and payee = ?";  
+            String getOldDebt2 = "select amount from debt where payer = ? and payee = ?";
+            PreparedStatement s1 = MySQLConnection.getConnection().prepareStatement(getOldDebt1);
+            PreparedStatement s2 = MySQLConnection.getConnection().prepareStatement(getOldDebt2);
+            s1.setString(1, friend);
+            s1.setString(2, LoginPage.username);
+            s2.setString(1, LoginPage.username);
+            s2.setString(2, friend);
+            ResultSet rs1 = s1.executeQuery();
+            ResultSet rs2 = s2.executeQuery();
+            
+            if(rs1.next()){
+                DBFlag =1;
+                old_debt = rs1.getInt(1);
+            }
+            else if(rs2.next()){
+                DBFlag = 0;
+                old_debt = rs2.getInt(1);
+            }
+            
+            else{
+                //CASE 1 : NO OLD DEBT EXISTS and I'm getting paid
+                if(flag==1){
+                String nEntry1 = "insert into debt values('"+LoginPage.username+"','" + friend + "',"+tAmount+")";
+                PreparedStatement case1 = MySQLConnection.getConnection().prepareStatement(nEntry1);
+                case1.executeUpdate();
+                }
+                //CASE 6 : NO OLD DEBT AND I'm paying
+                if(flag==0){
+                String nEntry2 = "insert into debt values('" + friend + "','" + LoginPage.username + "',"+tAmount+")";
+                PreparedStatement case6 = MySQLConnection.getConnection().prepareStatement(nEntry2);
+                case6.executeUpdate();
+                }
+                return;
+            }
+            //CASE 2 : I'm getting paid [user in payer table]
+                if(flag==1 && DBFlag==0 ){
+                    new_debt = old_debt + tAmount;
+                
+                    String debt2 = "update debt set amount = ? where payer = ? and payee = ?";
+                    PreparedStatement case2 = MySQLConnection.getConnection().prepareStatement(debt2);
+                    case2.setString(1, new_debt+"");
+                    case2.setString(2, LoginPage.username);
+                    case2.setString(3, friend);
+                    case2.executeUpdate();
+                }
+                //CASE 3 : I'm getting paid [user in payee table]
+                if(flag==1 && DBFlag == 1){
+                    new_debt = old_debt - tAmount;
+                    
+                    String debt3 = "update debt set amount = ? where payer = ? and payee = ?";
+                    PreparedStatement case3 = MySQLConnection.getConnection().prepareStatement(debt3);
+                    case3.setString(1, new_debt+"");
+                    case3.setString(2, friend);
+                    case3.setString(3, LoginPage.username);
+                    case3.executeUpdate();
+                }
+            //CASE 4 : I'm paying [user in payer table]
+            if(flag==0 && DBFlag == 0){
+                new_debt = old_debt - tAmount;
+                    
+                    String debt4 = "update debt set amount = ? where payer = ? and payee = ?";
+                    PreparedStatement case4 = MySQLConnection.getConnection().prepareStatement(debt4);
+                    case4.setString(1, new_debt+"");
+                    case4.setString(2, LoginPage.username);
+                    case4.setString(3, friend);
+                    case4.executeUpdate();
+            }
+            //CASE 5 : I'm paying [user in payee table]
+            if(flag==0 && DBFlag == 1){
+                new_debt = old_debt + tAmount;
+                
+                    String debt5 = "update debt set amount = ? where payer = ? and payee = ?";
+                    PreparedStatement case5 = MySQLConnection.getConnection().prepareStatement(debt5);
+                    case5.setString(1, new_debt+"");
+                    case5.setString(2, friend);
+                    case5.setString(3, LoginPage.username);
+                    case5.executeUpdate();
+            }
+            
+  }catch (SQLException ex) {
+            Logger.getLogger(settleUp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -238,9 +346,9 @@ public class settleUp extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addComponent(jButton1)
                 .addGap(17, 17, 17))
@@ -250,7 +358,7 @@ public class settleUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if((jRadioButton3.isSelected() == false && jRadioButton3.isSelected() ==false)){
+        if((jRadioButton3.isSelected() == false && jRadioButton4.isSelected() ==false)){
             JOptionPane.showMessageDialog(null, "Select whether paying or receiving");
             return;
         }
@@ -260,14 +368,13 @@ public class settleUp extends javax.swing.JFrame {
         }
         // flag = 1 => I'm getting paid
         // flag = 0 => I'm paying   
-        int flag;
         if(jRadioButton3.isSelected() == true)
             flag = 0;
         else
             flag = 1;
         
         int amt = Integer.parseInt(jTextField1.getText());
-        //ENTER SQL QUERY HERE
+        doTransaction();
         JOptionPane.showMessageDialog(null, "Transaction successfully recorded!");
        int result = JOptionPane.showConfirmDialog(null, "Add another transaction?");
        if(result == JOptionPane.YES_OPTION){
@@ -302,7 +409,7 @@ public class settleUp extends javax.swing.JFrame {
        }
        int result = JOptionPane.showConfirmDialog(null, "Was your transaction successful?");
        if(result == JOptionPane.YES_OPTION){
-                //*******INSERT QUERY HERE ***********
+                doTransaction();
                 JOptionPane.showMessageDialog(null, "Transaction recorded");
             int result2 = JOptionPane.showConfirmDialog(null, "Add another transaction?");
             if(result2 == JOptionPane.YES_OPTION){
@@ -316,12 +423,12 @@ public class settleUp extends javax.swing.JFrame {
        }
        else if(result == JOptionPane.NO_OPTION){
                     JOptionPane.showMessageDialog(null, "Transaction cancelled.");
-                    int result3 = JOptionPane.showConfirmDialog(null, "Add another transaction?");
-                if(result3 == JOptionPane.YES_OPTION){
+                    int result2 = JOptionPane.showConfirmDialog(null, "Add another transaction?");
+                if(result2 == JOptionPane.YES_OPTION){
                     this.dispose();
                     new settleUp().setVisible(true);
                 }
-                else if(result3 == JOptionPane.NO_OPTION){
+                else if(result2 == JOptionPane.NO_OPTION){
                     this.dispose();
                     new Dashboard().setVisible(true);
                 }
@@ -356,8 +463,7 @@ public class settleUp extends javax.swing.JFrame {
             jButton2.setEnabled(true);
 
             jComboBox1.setEnabled(false);        // TODO add your handling code here:
-            jRadioButton3.setText("I am paying " + jComboBox1.getSelectedItem().toString());
-            jRadioButton4.setText("I am getting paid by " + jComboBox1.getSelectedItem().toString());
+          
         }
 
     }//GEN-LAST:event_jButton4ActionPerformed
