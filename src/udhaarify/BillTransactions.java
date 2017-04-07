@@ -12,9 +12,10 @@ public class BillTransactions extends javax.swing.JFrame {
      * Creates new form BillTransactions
      */
     static int id;
-    public BillTransactions(int bill_id) {
+    public BillTransactions() {
         initComponents();
-        jLabel3.setText(bill_id + "");
+        
+        jLabel3.setText(AddABill.billID + "");
         DefaultListModel list = new DefaultListModel();
         for(int i=0;i<AddABill.counter;i++){
             String s = (i+1) + ". " + AddABill.final_string[i];
@@ -149,9 +150,7 @@ public class BillTransactions extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         id =  Integer.parseInt(jLabel3.getText().toString());     // TODO add your handling code here:
         this.dispose();
-
         new ViewBills().setVisible(true);
-
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -184,7 +183,7 @@ public class BillTransactions extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BillTransactions(AddABill.billID).setVisible(true);
+                new BillTransactions().setVisible(true);
             }
         });
     }

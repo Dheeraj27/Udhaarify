@@ -39,6 +39,8 @@ public class Dashboard extends javax.swing.JFrame {
         Arrays.fill(friends, null);
         Arrays.fill(owe, null);
         Arrays.fill(owes, null);
+        friends[0]="    ";
+        removeZeroDebts();
         getSQLFriends();
         getSQLAddFList();
         removeSelfName();
@@ -141,6 +143,15 @@ public class Dashboard extends javax.swing.JFrame {
             check = jComboBox1.getItemAt(i);
             if(check.equals(LoginPage.username))
                 jComboBox1.removeItemAt(i);
+        }
+    }
+    public void removeZeroDebts(){
+        try {
+            String remove = "delete from debt where amount = 0";
+            PreparedStatement stmt = MySQLConnection.getConnection().prepareStatement(remove);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**
@@ -396,6 +407,9 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        if(friends[0]=="    "){
+            friends[0]=null;
+        }
         if(jComboBox1.getSelectedItem() == null){
             JOptionPane.showMessageDialog(null, "No more registered users!");
             return;
@@ -406,7 +420,7 @@ public class Dashboard extends javax.swing.JFrame {
                 i++;
             Object selected = jComboBox1.getSelectedItem();
             friends[i]=selected.toString();
-            jList3.setListData(friends); 
+            jList3.setListData(friends);
             String add_friend = "insert into friend values( ? , ? )";
             PreparedStatement st = MySQLConnection.getConnection().prepareStatement(add_friend);
             st.setString(1, LoginPage.username);
@@ -420,10 +434,7 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-            if(friends.length == 0){
-                JOptionPane.showMessageDialog(null, "Friend list empty!");
-                return;
-            }
+
             if(jList3.getSelectedIndex() == -1){
                 JOptionPane.showMessageDialog(null, "Select/Add friend first!");
                 return;
@@ -431,7 +442,10 @@ public class Dashboard extends javax.swing.JFrame {
         
         int i = jList3.getSelectedIndex();
             String removed = friends[i];
-            System.out.println(friends.length);
+            if(removed=="   "){
+                JOptionPane.showMessageDialog(null, "Friend list empty!");
+                return;
+            }
             if(i==0){
                 while(friends[i]!=null){
                     friends[i]=friends[i+1];
@@ -440,7 +454,8 @@ public class Dashboard extends javax.swing.JFrame {
             }
             friends[i]=null;
             jList3.setListData(friends);
-            jComboBox1.addItem(removed);
+            if(removed!="   ")
+                jComboBox1.addItem(removed);
             try{
             String rmv = "delete from friend where username = ? and friend_username = ? ";
             String rmv2 ="delete from friend where friend_username = ? and username = ? ";
@@ -452,13 +467,14 @@ public class Dashboard extends javax.swing.JFrame {
             st2.setString(1, LoginPage.username);
             st2.setString(2, removed);
             st2.executeUpdate(); 
-            Dimension d1 = jList3.getPreferredSize();
-            jList3.setPreferredSize(d1);
-            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error in removing user");
             Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
+            if(friends[0]==null){
+                friends[0]="   ";
+                jList3.setListData(friends);
+            }
             
     }//GEN-LAST:event_jButton8ActionPerformed
 

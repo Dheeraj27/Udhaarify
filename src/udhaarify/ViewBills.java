@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-
 /**
  *
  * @author ayushmandey
@@ -25,7 +24,6 @@ public class ViewBills extends javax.swing.JFrame {
     String [] billPayers = new String[20];;
     String [] billPayers_amount = new String[20];
     String [] share = new String[20];
-
     /**
      * Creates new form ViewBills
      */
@@ -48,7 +46,6 @@ public class ViewBills extends javax.swing.JFrame {
         }
     
 }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
